@@ -1,0 +1,21 @@
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.exe.config
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.exe
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.pdb
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.exe
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.pdb
