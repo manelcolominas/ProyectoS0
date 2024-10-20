@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Remoting.Channels;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,20 +20,24 @@ namespace Battleship
     {
         String username, password, reply;
         Socket server;
+        //Size originalSize;
+        public string listaconectados;
+
+
         public Battleship()
         {
             InitializeComponent();
             show_Panel(Login_panel);
             IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc,9080);
+            IPEndPoint ipep = new IPEndPoint(direc,8020);
 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
             // Connect to the server
             server.Connect(ipep);
         }
-
-        private void show_Panel(Panel panel)
+        
+      
+        public void show_Panel(Panel panel)
         {
             Login_panel.Visible = false;
             Sign_Up_panel.Visible = false;
@@ -67,7 +72,7 @@ namespace Battleship
             string password = password_Login_panel_textBox.Text;
 
             // Prepare the login data using ASCII encoding
-            string serviceCode = "1";  // 1 for login
+            string serviceCode = "2";  // 1 for login
             string loginData = $"{serviceCode}/{username}/{password}";
             byte[] data = Encoding.ASCII.GetBytes(loginData);
 
@@ -82,10 +87,11 @@ namespace Battleship
             Console.WriteLine("Server response: " + response);
 
             // Check the server response for login success
-            if (response.Contains("SUCCESS"))
+            if (response.Contains("1/1"))
             {
                 MessageBox.Show("Login successful!");
                 show_Panel(User_panel);
+
             }
             else
             {
@@ -100,15 +106,16 @@ namespace Battleship
         // sign_up_Sign_Up_Form_button
         private void Battleship_Load(object sender, EventArgs e)
         {
+            //originalSize = dataGridView.Size;
 
-        }
-        // el text que conté el butó (en MINÚSCULAS)+_+ Nom del formulari al qual pertanyen (User/Sign_Up/Login/Game) +_+Form+_+button/label
-        // login_Login_Form_button
-        // sign_up_Login_Form_button
-        // resume_game_User_Form_button
-        // new_game_User_Form_button
-        // sign_up_Sign_Up_Form_button
-        private void sign_up_Login_Form_button_Click(object sender, EventArgs e)
+    }
+    // el text que conté el butó (en MINÚSCULAS)+_+ Nom del formulari al qual pertanyen (User/Sign_Up/Login/Game) +_+Form+_+button/label
+    // login_Login_Form_button
+    // sign_up_Login_Form_button
+    // resume_game_User_Form_button
+    // new_game_User_Form_button
+    // sign_up_Sign_Up_Form_button
+    private void sign_up_Login_Form_button_Click(object sender, EventArgs e)
         {
             show_Panel(Sign_Up_panel);
         }
@@ -122,6 +129,14 @@ namespace Battleship
         private void new_game_User_Form_button_Click(object sender, EventArgs e)
         {
             // Començar una partida nova
+            NewGame newGameForm = new NewGame(this);
+
+            // Mostrar el formulario
+            //newGameForm.Show();
+            newGameForm.ShowDialog();
+
+     
+
         }
 
         private void players_list_checkBox_CheckedChanged(object sender, EventArgs e)
@@ -140,92 +155,255 @@ namespace Battleship
         //inicializamos el datagrid para mostrar las diferentes partidas qcon un mismo oponente
         private void InitializeDataGridView()
         {
-            // Agregar columnas al DataGridView
-            playersDataGridView.Columns.Add("IdPartida", "ID Partida");
-            playersDataGridView.Columns.Add("Jugador1", "Jugador 1");
-            playersDataGridView.Columns.Add("Jugador2", "Jugador 2");
-            playersDataGridView.Columns.Add("PuntosJugador1", "Puntos Jugador 1");
-            playersDataGridView.Columns.Add("PuntosJugador2", "Puntos Jugador 2");
-            playersDataGridView.Columns.Add("Inicio", "Inicio");
-            playersDataGridView.Columns.Add("Final", "Final");
-
-            playersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            
         }
-        
 
-       //función que recibe el mensaje del servidor, lo procesa y lo muestra en el datagridview
-        private void ProcessGameResults(string response)
+
+        //función que recibe el mensaje del servidor, lo procesa y lo muestra en el datagridview
+        private void ProcessGameResults(string resultado)
         {
-       
-            // Dividir la respuesta en líneas
-            string[] lines = response.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // Vaciar el DataGridView antes de agregar nuevos resultados
+            dataGridView.DataSource = null; // Limpia el DataGridView actual
 
-            foreach (string line in lines)
+            // Separar los resultados usando el salto de línea como delimitador
+            string[] filas = resultado.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Crear una tabla de datos (DataTable) para almacenar los resultados
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Username");    // Columna para el nombre de usuario
+            dataTable.Columns.Add("Total Points"); // Columna para los puntos totales
+
+            // Iterar a través de cada fila de resultados
+            foreach (var fila in filas)
             {
-                // Suponiendo que cada línea está bien formateada
-                string[] parts = line.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (parts.Length == 7) // Verifica que haya 7 partes
+                // Separar el nombre de usuario y los puntos totales
+                string[] datos = fila.Split('/');
+                if (datos.Length == 2) // Verificamos que tenemos dos partes
                 {
-                    // Extraer los valores
-                    string idPartida = parts[0].Split(':')[1].Trim();
-                    string jugador1 = parts[1].Split(':')[1].Trim();
-                    string jugador2 = parts[2].Split(':')[1].Trim();
-                    string puntosJugador1 = parts[3].Split(':')[1].Trim();
-                    string puntosJugador2 = parts[4].Split(':')[1].Trim();
-                    string inicio = parts[5].Split(':')[1].Trim();
-                    string final = parts[6].Split(':')[1].Trim();
-
-                    // Agregar una nueva fila al DataGridView
-                    playersDataGridView.Rows.Add(idPartida, jugador1, jugador2, puntosJugador1, puntosJugador2, inicio, final);
+                    // Agregar una nueva fila a la DataTable
+                    dataTable.Rows.Add(datos[0], int.Parse(datos[1])); // Nombre de usuario y puntos totales
                 }
             }
-            // HE CREAT UN ALTRE DATAGRIDVIEW
+
+            // Asignar la DataTable al DataGridView
+            dataGridView.DataSource = dataTable;
+
+            // Configurar el modo de autoajuste de columnas y filas
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; // Ajustar el ancho de las columnas
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;       // Ajustar el alto de las filas
+
+            // (Opcional) Redimensionar el DataGridView para que se ajuste al contenido
+            dataGridView.AutoResizeColumns();  // Redimensionar las columnas automáticamente
+            dataGridView.AutoResizeRows();     // Redimensionar las filas automáticamente
+
+            // Calcular el tamaño total del DataGridView basado en el contenido
+
+            // 1. Ancho total: sumar el ancho de todas las columnas
+            int totalWidth = dataGridView.RowHeadersWidth; // Incluir el ancho de los encabezados de las filas
+            foreach (DataGridViewColumn column in dataGridView.Columns)
+            {
+                totalWidth += column.Width;
+            }
+
+            // 2. Alto total: sumar el alto de todas las filas + encabezado de las columnas
+            int totalHeight = dataGridView.ColumnHeadersHeight; // Incluir el alto del encabezado de las columnas
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                totalHeight += row.Height;
+            }
+
+            // Opcional: añadir espacio extra para las barras de desplazamiento si están presentes
+            if (dataGridView.Rows.Count > dataGridView.DisplayedRowCount(false))
+            {
+                totalWidth += SystemInformation.VerticalScrollBarWidth; // Ancho adicional para la barra de desplazamiento vertical
+            }
+            if (dataGridView.Columns.Count > dataGridView.DisplayedColumnCount(false))
+            {
+                totalHeight += SystemInformation.HorizontalScrollBarHeight; // Alto adicional para la barra de desplazamiento horizontal
+
+            }
+            dataGridView.RowHeadersVisible = false;
+
+            dataGridView.Width = totalWidth;
+            dataGridView.Height = totalHeight;
         }
 
-
-        private void query_Button_Click(object sender, EventArgs e)
+        void ProcessShowGamesResult(string resultado)
         {
-            playersDataGridView.Rows.Clear(); //limpiamos el data grid donde se mostraran las partidas contra un oponente
+            // Vaciar el DataGridView antes de agregar nuevos resultados
+            dataGridView.DataSource = null;
 
+            // Separar los resultados usando '/' como delimitador
+            string[] filas = resultado.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
+            // Crear un DataTable para almacenar los resultados
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID Game");
+            dataTable.Columns.Add("Player 1 ID");
+            dataTable.Columns.Add("Player 2 ID");
+            dataTable.Columns.Add("Points Player 1");
+            dataTable.Columns.Add("Points Player 2");
+            dataTable.Columns.Add("Start Time");
+            dataTable.Columns.Add("End Time");
+
+            // Iterar a través de cada fila de resultados
+            foreach (var fila in filas)
+            {
+                // Separar la información de cada partida
+                string[] datos = fila.Split('/');
+                if (datos.Length == 7) // Asegurarnos que hay siete partes
+                {
+                    // Agregar una nueva fila al DataTable
+                    dataTable.Rows.Add(datos[0], datos[1], datos[2], datos[3], datos[4], datos[5], datos[6]);
+                }
+            }
+
+            // Asignar el DataTable al DataGridView
+            dataGridView.DataSource = dataTable;
+
+            // Configurar el modo de autoajuste de columnas y filas
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; // Ajustar el ancho de las columnas
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;       // Ajustar el alto de las filas
+
+            // (Opcional) Redimensionar el DataGridView para que se ajuste al contenido
+            dataGridView.AutoResizeColumns();  // Redimensionar las columnas automáticamente
+            dataGridView.AutoResizeRows();     // Redimensionar las filas automáticamente
+
+            // Calcular el tamaño total del DataGridView basado en el contenido
+
+            // 1. Ancho total: sumar el ancho de todas las columnas
+            int totalWidth = dataGridView.RowHeadersWidth; // Incluir el ancho de los encabezados de las filas
+            foreach (DataGridViewColumn column in dataGridView.Columns)
+            {
+                totalWidth += column.Width;
+            }
+
+            // 2. Alto total: sumar el alto de todas las filas + encabezado de las columnas
+            int totalHeight = dataGridView.ColumnHeadersHeight; // Incluir el alto del encabezado de las columnas
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                totalHeight += row.Height;
+            }
+
+            // Opcional: añadir espacio extra para las barras de desplazamiento si están presentes
+            if (dataGridView.Rows.Count > dataGridView.DisplayedRowCount(false))
+            {
+                totalWidth += SystemInformation.VerticalScrollBarWidth; // Ancho adicional para la barra de desplazamiento vertical
+            }
+            if (dataGridView.Columns.Count > dataGridView.DisplayedColumnCount(false))
+            {
+                totalHeight += SystemInformation.HorizontalScrollBarHeight; // Alto adicional para la barra de desplazamiento horizontal
+
+            }
+            dataGridView.RowHeadersVisible = false;
+
+            dataGridView.Width = totalWidth;
+            dataGridView.Height = totalHeight;
+        }
+
+        void ProcessListResults(string resultado)
+        {
+            //dataGridView.Size = originalSize;
+            // Vaciar el DataGridView antes de agregar nuevos resultados
+            dataGridView.DataSource = null;
+
+            // Crear un DataTable para almacenar los resultados
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Opponent Username");
+
+            // Separar los nombres de oponentes usando '\n' como delimitador
+            string[] oponentes = resultado.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Iterar a través de cada oponente y añadirlos al DataTable
+            foreach (var oponente in oponentes)
+            {
+                dataTable.Rows.Add(oponente); // Agregar cada oponente como una fila
+            }
+
+            // Asignar el DataTable al DataGridView
+            dataGridView.DataSource = dataTable;
+
+            // Configurar el modo de autoajuste de columnas y filas
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; // Ajustar el ancho de las columnas
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;       // Ajustar el alto de las filas
+
+            // (Opcional) Redimensionar el DataGridView para que se ajuste al contenido
+            dataGridView.AutoResizeColumns();  // Redimensionar las columnas automáticamente
+            dataGridView.AutoResizeRows();     // Redimensionar las filas automáticamente
+
+            // Calcular el tamaño total del DataGridView basado en el contenido
+
+            // 1. Ancho total: sumar el ancho de todas las columnas
+            int totalWidth = dataGridView.RowHeadersWidth +1 ; // Incluir el ancho de los encabezados de las filas
+            foreach (DataGridViewColumn column in dataGridView.Columns)
+            {
+                totalWidth += column.Width;
+            }
+
+            // 2. Alto total: sumar el alto de todas las filas + encabezado de las columnas
+            int totalHeight = dataGridView.ColumnHeadersHeight; // Incluir el alto del encabezado de las columnas
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                totalHeight += row.Height;
+            }
+
+            // Opcional: añadir espacio extra para las barras de desplazamiento si están presentes
+            if (dataGridView.Rows.Count > dataGridView.DisplayedRowCount(false))
+            {
+                totalWidth += SystemInformation.VerticalScrollBarWidth; // Ancho adicional para la barra de desplazamiento vertical
+            }
+            if (dataGridView.Columns.Count > dataGridView.DisplayedColumnCount(false))
+            {
+                totalHeight += SystemInformation.HorizontalScrollBarHeight; // Alto adicional para la barra de desplazamiento horizontal
+            }
+
+            // Ajustar el tamaño del DataGridView para que coincida con el contenido
+            dataGridView.RowHeadersVisible = false;
+
+            dataGridView.Width = totalWidth;
+            dataGridView.Height = totalHeight;
+        }
+        
+        
+        public void query_Button_Click(object sender, EventArgs e)
+        {
             if (players_list_radioButton.Checked)
             {
                 //quiere consultar la lista de jugadores con los que ha jugado una partida al menos una vez
-                
                 string username = nombre_usuario_label.Text;
-                string mensaje = $" 3/{username}";
+                string mensaje = $"3/{username}";
 
                 // Enviamos al servidor el nombre tecleado
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
 
                 //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                ProcessGameResults(mensaje);
-                // HE CREAT UN ALTRE DATAGRIDVIEW
+                byte[] msg2 = new byte[4096];  // Aumentar el tamaño para permitir más datos
+                int bytesRead = server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2, 0, bytesRead).Split('\0')[0];
+
+                ProcessListResults(mensaje);
             }
 
             else if (game_results_radioButton.Checked)
             {
-               //quiere consultar los resultados de las partidas contra un oponente que se ingresa por el textbox
-                
+                //quiere consultar los resultados de las partidas contra un oponente que se ingresa por el textbox
+
                 string username = nombre_usuario_label.Text;
                 string opponent = opponent_textBox.Text;
                 string mensaje = $"4/{username}/{opponent}";
 
-                // Enviar al servidor el mensaje
+                // Enviar el mensaje al servidor
+                byte[] msg = Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
 
                 // Recibir la respuesta del servidor
-                byte[] msg2 = new byte[512];  // Cambié el tamaño para permitir más datos
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
+                byte[] msg2 = new byte[4096];  // Aumentamos el tamaño para permitir más datos
+                int bytesRead = server.Receive(msg2);
+                string response = Encoding.ASCII.GetString(msg2, 0, bytesRead).Split('\0')[0];
 
                 // Procesar la respuesta para llenar el DataGridView
-                ProcessGameResults(mensaje);
-                // HE CREAT UN ALTRE DATAGRIDVIEW
+                ProcessShowGamesResult(response);
             }
 
             else if (games_sort_date_radioButton.Checked)
@@ -233,37 +411,34 @@ namespace Battleship
                 // User input
                 string username = nombre_usuario_label.Text;
 
-                // Assuming you have DateTimePicker controls named 'initialDatePicker' and 'endingDatePicker'
-                DateTime initial_date = initial_dateTimePicker.Value; // Get the selected initial date
-                DateTime ending_date = ending_dateTimePicker.Value;    // Get the selected ending date
+                // Obtener fechas desde los DateTimePicker
+                DateTime initial_date = initial_dateTimePicker.Value;
+                DateTime ending_date = ending_dateTimePicker.Value;
 
-                // Format the dates to a string suitable for your server (e.g., YYYY-MM-DD)
-                string formattedInitialDate = initial_date.ToString("yyyy-MM-dd");
-                string formattedEndingDate = ending_date.ToString("yyyy-MM-dd");
+                // Formatear las fechas
+                string formattedInitialDate = initial_date.ToString("yyyy-MM-dd HH:mm:ss");
+                string formattedEndingDate = ending_date.ToString("yyyy-MM-dd HH:mm:ss");
 
-                // Prepare the message to send
+                // Preparar el mensaje
                 string mensaje = $"5/{username}/{formattedInitialDate}/{formattedEndingDate}";
 
-                // Send the message to the server
+                // Enviar el mensaje al servidor
                 byte[] msg = Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg); // Sending the message using server.Client.Send
+                server.Send(msg);
 
-                // Receive the response from the server
-                byte[] msg2 = new byte[512];  // Size for receiving data
-                int bytesRead = server.Receive(msg2); // Receiving the response
+                // Recibir la respuesta del servidor
+                byte[] msg2 = new byte[2048];  // Ajustar el tamaño según lo esperado
+                int bytesRead = server.Receive(msg2);
 
-                // Process the response
+                // Procesar la respuesta
                 string response = Encoding.ASCII.GetString(msg2, 0, bytesRead);
-                ProcessGameResults(response);
+                ProcessShowGamesResult(response);
 
-                // Close the connection
-                server.Close();
-
-                // HE CREAT UN ALTRE DATAGRIDVIEW
+                // Cerrar la conexión
+                //server.Close();
             }
             else if (ranking_radioButton.Checked)
             {
-                // Sort ranking code to ask the query
                 string mensaje = "6"; // Operation code for showing rankings
 
                 // Send the message to the server
@@ -272,15 +447,60 @@ namespace Battleship
 
                 // Prepare to receive the response from the server
                 byte[] msg2 = new byte[512];  // Increased size for more data
-                int bytesReceived = server.Receive(msg2);
+                StringBuilder sb = new StringBuilder(); // Use a StringBuilder to concatenate the incoming messages
+                int bytesReceived;
+
+                // Keep receiving data until there's no more data
+                do
+                {
+                    bytesReceived = server.Receive(msg2);
+                    sb.Append(Encoding.ASCII.GetString(msg2, 0, bytesReceived));
+                } while (bytesReceived > 0);
 
                 // Convert the received bytes to a string
-                mensaje = Encoding.ASCII.GetString(msg2, 0, bytesReceived).TrimEnd('\0');
+                mensaje = sb.ToString().TrimEnd('\0');
 
-                // Process the response to fill the DataGridView
+                // Clear the DataGridView before processing the new results
                 ProcessGameResults(mensaje);
-                // HE CREAT UN ALTRE DATAGRIDVIEW
             }
+            else if (connected_users_radioButton.Checked)
+            {
+                //quiere consultar la lista de jugadores con conectados
+                string username = nombre_usuario_label.Text;
+                string mensaje = $"7/{username}";
+
+                // Enviamos al servidor el nombre tecleado
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+
+                //Recibimos la respuesta del servidor
+                byte[] msg2 = new byte[4096];  // Aumentar el tamaño para permitir más datos
+                int bytesRead = server.Receive(msg2);
+                mensaje = Encoding.ASCII.GetString(msg2, 0, bytesRead).Split('\0')[0];
+                listaconectados = mensaje;
+                ProcessListResults(mensaje);
+            }
+           
+        }
+
+        private void username_Login_panel_textBox_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void User_panel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+
         }
 
 
@@ -312,7 +532,7 @@ namespace Battleship
             this.BackColor = Color.Green; // Change the background color if the connection is successful
 
             // Step 1: Choose a service, e.g., "2" for signup
-            string serviceCode = "2";  // 1 for login, 2 for signup
+            string serviceCode = "1";  // 2 for login, 1 for signup
 
             // Get the username from the TextBox
             string username = username_Sign_Up_panel_textBox.Text;
