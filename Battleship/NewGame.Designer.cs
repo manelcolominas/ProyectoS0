@@ -39,6 +39,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dataGridView_MiMar = new System.Windows.Forms.DataGridView();
             this.dataGridView_marOponente = new System.Windows.Forms.DataGridView();
+            this.EnviarSolicitud = new System.Windows.Forms.Button();
+            this.Conectar = new System.Windows.Forms.Button();
+            this.Desconectar = new System.Windows.Forms.Button();
             this.seleccionarOponente_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_connectados)).BeginInit();
             this.game_panel.SuspendLayout();
@@ -144,7 +147,6 @@
             this.label2.Size = new System.Drawing.Size(94, 20);
             this.label2.TabIndex = 2;
             this.label2.Text = "MY SHIPS";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // dataGridView_MiMar
             // 
@@ -169,16 +171,48 @@
             this.dataGridView_marOponente.Size = new System.Drawing.Size(304, 286);
             this.dataGridView_marOponente.TabIndex = 0;
             // 
+            // EnviarSolicitud
+            // 
+            this.EnviarSolicitud.Location = new System.Drawing.Point(44, 288);
+            this.EnviarSolicitud.Name = "EnviarSolicitud";
+            this.EnviarSolicitud.Size = new System.Drawing.Size(75, 23);
+            this.EnviarSolicitud.TabIndex = 2;
+            this.EnviarSolicitud.Text = "EnviarSolicitud";
+            this.EnviarSolicitud.UseVisualStyleBackColor = true;
+            this.EnviarSolicitud.Click += new System.EventHandler(this.EnviarSolicitud_Click);
+            // 
+            // Conectar
+            // 
+            this.Conectar.Location = new System.Drawing.Point(185, 288);
+            this.Conectar.Name = "Conectar";
+            this.Conectar.Size = new System.Drawing.Size(75, 23);
+            this.Conectar.TabIndex = 3;
+            this.Conectar.Text = "Conectar";
+            this.Conectar.UseVisualStyleBackColor = true;
+            this.Conectar.Click += new System.EventHandler(this.Conectar_Click);
+            // 
+            // Desconectar
+            // 
+            this.Desconectar.Location = new System.Drawing.Point(340, 288);
+            this.Desconectar.Name = "Desconectar";
+            this.Desconectar.Size = new System.Drawing.Size(75, 23);
+            this.Desconectar.TabIndex = 4;
+            this.Desconectar.Text = "Desconectar";
+            this.Desconectar.UseVisualStyleBackColor = true;
+            this.Desconectar.Click += new System.EventHandler(this.Desconectar_Click);
+            // 
             // NewGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1635, 1047);
+            this.Controls.Add(this.Desconectar);
+            this.Controls.Add(this.Conectar);
+            this.Controls.Add(this.EnviarSolicitud);
             this.Controls.Add(this.game_panel);
             this.Controls.Add(this.seleccionarOponente_panel);
             this.Name = "NewGame";
             this.Text = "New Game";
-            this.Load += new System.EventHandler(this.NewGame_Load);
             this.seleccionarOponente_panel.ResumeLayout(false);
             this.seleccionarOponente_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGrid_connectados)).EndInit();
@@ -203,5 +237,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button EnviarSolicitud;
+        private System.Windows.Forms.Button Conectar;
+        private System.Windows.Forms.Button Desconectar;
     }
 }

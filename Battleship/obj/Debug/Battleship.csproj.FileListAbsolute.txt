@@ -63,3 +63,7 @@ C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.csproj.CoreCompileIn
 C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.exe
 C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.pdb
 C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.NewGame.resources
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.exe
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.pdb

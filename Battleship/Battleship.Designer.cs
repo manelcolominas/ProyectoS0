@@ -81,7 +81,7 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(36, 36);
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 37);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // password_Login_panel_textBox
@@ -261,7 +261,7 @@
             // 
             this.connected_users_radioButton.AutoSize = true;
             this.connected_users_radioButton.Location = new System.Drawing.Point(111, 539);
-            this.connected_users_radioButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.connected_users_radioButton.Margin = new System.Windows.Forms.Padding(2);
             this.connected_users_radioButton.Name = "connected_users_radioButton";
             this.connected_users_radioButton.Size = new System.Drawing.Size(158, 24);
             this.connected_users_radioButton.TabIndex = 31;
@@ -412,8 +412,7 @@
             // 
             // Battleship
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1237, 724);
             this.Controls.Add(this.User_panel);
             this.Controls.Add(this.Sign_Up_panel);

@@ -8,12 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using Microsoft.Win32;
 
 namespace Battleship
 {
     public partial class NewGame : Form
     {
         private Battleship battleshipForm; // Referencia a la instancia de Battleship
+        private Socket server;
+        private Thread atender; 
         public NewGame(Battleship form)
         {
             InitializeComponent();
@@ -173,7 +179,69 @@ namespace Battleship
             midatagrid.Width = midatagrid.Columns.Count * cellSize + midatagrid.RowHeadersWidth;
             midatagrid.Height = midatagrid.Rows.Count * cellSize + midatagrid.ColumnHeadersHeight;
         }
-        private void NewGame_Load(object sender, EventArgs e)
+        private void AtenderServidor()
+        {
+            while (true)
+            {
+                try
+                {
+                    // Recibimos la respuesta del servidor
+                    byte[] msg2 = new byte[1024]; // Aumentar el tamaño del buffer para recibir mensajes más largos
+                    int bytesRec = server.Receive(msg2);
+                    string response = Encoding.ASCII.GetString(msg2, 0, bytesRec);
+                    string[] trozos = response.Split('/');
+                    int codigo = Convert.ToInt32(trozos[0]);
+                    string mensaje = trozos[1].Split('\0')[0];
+                    if (DataGrid_connectados.SelectedRows.Count > 0)
+                    {
+                        // Obtener la fila seleccionada (en el caso de que haya más de una, solo tomamos la primera)
+                        DataGridViewRow row = DataGrid_connectados.SelectedRows[0];
+
+                        // Obtener el valor de la celda en la columna "Username"
+                        string nombreUsuario = row.Cells["Username"].Value.ToString();
+
+                        switch (codigo)
+                        {
+                            case 1: // Registro
+                                MessageBox.Show("Registro: " + mensaje);
+                                break;
+
+                            case 2: // Login
+                                MessageBox.Show("Login: " + mensaje);
+                                break;
+
+                            case 3: // Listar juegos
+                                MessageBox.Show("Lista de juegos: " + mensaje);
+                                break;
+
+                            case 4: // Consulta de oponente
+                                MessageBox.Show("Consulta de oponente: " + mensaje);
+                                break;
+
+                            case 5: // Mostrar juegos
+                                MessageBox.Show("Mostrar juegos: " + mensaje);
+                                break;
+
+                            case 6: // Mostrar rankings
+                                MessageBox.Show("Mostrar rankings: " + mensaje);
+                                break;
+
+                            case 7: // Mostrar usuarios conectados
+                                MessageBox.Show("Usuarios conectados: " + mensaje);
+                                break;
+
+                            default:
+                                MessageBox.Show("Código de respuesta no reconocido: " + codigo);
+                                break;
+                        }
+                    }
+            catch (Exception ex)
+                {
+                    MessageBox.Show("Error al recibir datos: " + ex.Message);
+                    break; // Salir del bucle en caso de error
+                }
+            }
+            private void NewGame_Load(object sender, EventArgs e)
         {
 
         }
@@ -182,7 +250,129 @@ namespace Battleship
         {
 
         }
-    }
 
-  
-}
+        private void dataGridView_MiMar_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        
+    }
+    
+
+        private void EnviarSolicitud_Click(object sender, EventArgs e)
+        {
+            {
+
+
+            nombreUsuario = txtUsername.Text;
+
+                // Verificamos qué opción ha seleccionado el usuario
+                if (registro.Checked)
+                {
+                    // Quiere registrar
+                    string mensaje = "1/" + nombreUsuario;
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (login.Checked)
+                {
+                    // Quiere hacer login
+                    string mensaje = "2/" + nombreUsuario; // Asumiendo que el nombre es el dato para login
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (listarJuegos.Checked)
+                {
+                    // Quiere listar juegos
+                    string mensaje = "3/";
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (consultaOponente.Checked)
+                {
+                    // Quiere consultar oponente
+                    string mensaje = "4/" + nombreUsuario; // Asumiendo que el nombre es el dato para consultar
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (mostrarJuegos.Checked)
+                {
+                    // Quiere mostrar juegos
+                    string mensaje = "5/";
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (mostrarRankings.Checked)
+                {
+                    // Quiere mostrar rankings
+                    string mensaje = "6/";
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else if (usuariosConectados.Checked)
+                {
+                    // Quiere mostrar usuarios conectados
+                    string mensaje = "7/";
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                    server.Send(msg);
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, selecciona una opción.");
+                }
+            }
+        }
+
+        private void Conectar_Click(object sender, EventArgs e)
+        {
+            string nombreUsuario = row.Cells["Username"].Value.ToString();
+            // Creamos un IPEndPoint con el ip del servidor y puerto del servidor 
+            IPAddress direc = IPAddress.Parse("192.168.56.102");
+            IPEndPoint ipep = new IPEndPoint(direc, 9080);
+
+            // Creamos el socket 
+            server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                server.Connect(ipep); // Intentamos conectar el socket
+                this.BackColor = Color.Green;
+                MessageBox.Show("Conectado");
+
+                // Enviar mensaje al servidor para notificar que se ha conectado
+                string mensaje = "CONNECT/" + nombreUsuario;
+                byte[] msg = Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("No he podido conectar con el servidor");
+                return;
+            }
+
+            // Pongo en marcha el thread que atenderá los mensajes del servidor
+            ThreadStart ts = delegate { AtenderServidor(); };
+            atender = new Thread(ts);
+            atender.Start();
+
+        }
+
+        private void Desconectar_Click(object sender, EventArgs e)
+        {
+            string nombreUsuario = row.Cells["Username"].Value.ToString();
+            // Obtenemos el nombre de usuario desde el TextBox
+            nombreUsuario = txtUsername.Text;
+
+            // Mensaje de desconexión
+            string mensaje = "DISCONNECT/" + nombreUsuario;
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+            server.Send(msg);
+
+            // Nos desconectamos
+            atender.Abort();
+            this.BackColor = Color.Gray;
+            server.Shutdown(SocketShutdown.Both);
+            server.Close();
+
+        }
+    }

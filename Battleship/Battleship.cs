@@ -503,6 +503,21 @@ namespace Battleship
 
         }
 
+        private void EnviarSolicitud_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Conectar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Desconectar_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         // login_Login_Form_button
         // sign_up_Login_Form_button
