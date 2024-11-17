@@ -4,7 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+<<<<<<< HEAD
     <ProjectGuid>{D02367FD-B25C-4537-B220-82F81A5403B6}</ProjectGuid>
+=======
+    <ProjectGuid>{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}</ProjectGuid>
+>>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
     <OutputType>WinExe</OutputType>
     <RootNamespace>Battleship</RootNamespace>
     <AssemblyName>Battleship</AssemblyName>
@@ -46,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -56,6 +61,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+=======
+    <Compile Include="Battleship.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Battleship.Designer.cs">
+      <DependentUpon>Battleship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewGame.Designer.cs">
+      <DependentUpon>NewGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Battleship.resx">
+      <DependentUpon>Battleship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewGame.resx">
+      <DependentUpon>NewGame.cs</DependentUpon>
+>>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -65,7 +91,10 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+<<<<<<< HEAD
       <DesignTime>True</DesignTime>
+=======
+>>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -80,8 +109,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+<<<<<<< HEAD
   <ItemGroup>
     <None Include="bin\Debug\fondo inici.jpg" />
   </ItemGroup>
+=======
+>>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
