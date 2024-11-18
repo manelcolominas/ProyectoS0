@@ -1,0 +1,126 @@
+<<<<<<< HEAD
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\bin\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\bin\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.Form1.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\obj\Debug\Battleship.pdb
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\bin\Debug\Battleship.exe
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\bin\Debug\Battleship.pdb
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.Form1.resources
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.exe
+C:\Users\Hugo\Desktop\SO proy nou\Battleship\Battleship\obj\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\bin\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\bin\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.Form1.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Nova Versió\Battleship\Battleship\obj\Debug\Battleship.pdb
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\bin\Debug\Battleship.exe
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\bin\Debug\Battleship.pdb
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.Form1.resources
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.exe
+C:\Users\Hugo\Desktop\Battleship (2)\Battleship\Battleship\obj\Debug\Battleship.pdb
+C:\SO\projecte\new\Battleship\bin\Debug\Battleship.exe.config
+C:\SO\projecte\new\Battleship\bin\Debug\Battleship.exe
+C:\SO\projecte\new\Battleship\bin\Debug\Battleship.pdb
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.Form1.resources
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.exe
+C:\SO\projecte\new\Battleship\obj\Debug\Battleship.pdb
+=======
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\bin\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\Proyecto\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.exe.config
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.exe
+C:\SO\proyectoSO\Battleship\bin\Debug\Battleship.pdb
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.exe
+C:\SO\proyectoSO\Battleship\obj\Debug\Battleship.pdb
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\bin\Debug\Battleship.exe
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\bin\Debug\Battleship.pdb
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.exe
+C:\Users\Hugo\Downloads\ProyectoS0-main\ProyectoS0-main\Battleship\obj\Debug\Battleship.pdb
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\bin\Debug\Battleship.exe
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\bin\Debug\Battleship.pdb
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.exe
+C:\Users\Hugo\Downloads\SO_latestVersion\SO_latestVersion\Battleship\obj\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\bin\Debug\Battleship.exe.config
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\bin\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\bin\Debug\Battleship.pdb
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.exe
+C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Versió 2\Battleship\obj\Debug\Battleship.pdb
+C:\SO\proyectoSO\Version #2\Battleship\bin\Debug\Battleship.exe.config
+C:\SO\proyectoSO\Version #2\Battleship\bin\Debug\Battleship.exe
+C:\SO\proyectoSO\Version #2\Battleship\bin\Debug\Battleship.pdb
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.Battleship.resources
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.exe
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.pdb
+C:\SO\proyectoSO\Version #2\Battleship\obj\Debug\Battleship.NewGame.resources
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.csproj.SuggestedBindingRedirects.cache
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.exe
+C:\Users\tarre\OneDrive\Desktop\Aerotelecom\TERCER\3A\SO\Projecte\Últim\Versió #2\Battleship\obj\Debug\Battleship.pdb
+>>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
