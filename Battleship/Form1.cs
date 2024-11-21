@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Battleship
     public partial class Form1 : Form
     {
         Socket server;
+        Thread atender;
         public Form1()
         {
             InitializeComponent();
@@ -24,26 +26,108 @@ namespace Battleship
             signup_panel.Visible = false;
             user_panel.Visible = false;
             show_Panel(login_panel);
-
-            IPAddress direc = IPAddress.Parse("192.168.56.101");
-            IPEndPoint ipep = new IPEndPoint(direc, 8050);
-
-            server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            // Intentar conectar al servidor
-            try
-            {
-                server.Connect(ipep);
-                MessageBox.Show("Connection successful", "Connection Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (SocketException ex)
-            {
-                MessageBox.Show("Connection failed: " + ex.Message, "Connection Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
 
 
+        //función que escucha constantemente al servidor y procesa sus mensajes
+        private void AtenderServidor()
+        {
+            while (true) 
+            {
+                // Receive the message from the server
+                byte[] responseData = new byte[256];
+                int bytesReceived = server.Receive(responseData);
+                string [] trozos_respuesta = Encoding.ASCII.GetString(responseData, 0, bytesReceived).Split('*');
+                int codigo = Convert.ToInt32(trozos_respuesta[0]);
+                string response = trozos_respuesta[1].Split('\0')[0];
+
+                switch (codigo)
+                {
+                    case 1: //sign up
+                        MessageBox.Show("Server response: " + response);
+                        if (response.Contains("6/1"))
+                        {
+                            MessageBox.Show("Sign Up successful!");
+                            show_Panel(login_panel);
+
+                        }
+                        else if (response.Contains("6/0"))
+                        {
+                            MessageBox.Show("Username already taken.");
+                        }
+                        break;
+                    case 2: //log in
+                        MessageBox.Show("Server response: " + response);
+                        // Check the server response for login success
+                        if (response.Contains("1/1"))
+                        {
+                            MessageBox.Show("Login successful!");
+                            this.Invoke(new Action (() => { mostrar_user_panel(response);  }));
+                        }
+                        else if (response.Contains("1/2"))
+                        {
+                            MessageBox.Show("User already connected");
+                        }
+                        else if (response.Contains("1/3"))
+                        {
+                            MessageBox.Show("Invalid username or password.");
+                        }
+                        break;
+                    case 3: //list of games
+                        string[] trozos = response.Split('/');
+                        if (trozos[0] == "3")
+                        {
+                            MessageBox.Show("No se encontraron oponentes")
+                            ;
+                        }
+                        else {
+                            MessageBox.Show("Server response:" + response);
+                            ProcessOpponentList(response);
+                            // HE CREAT UN ALTRE DATAGRIDVIEW
+                        }
+
+                        break;
+                    case 4: //consultar oponente
+                        MessageBox.Show("Server response: " + response);
+                        // Procesar la respuesta para llenar el DataGridView
+                        ProcessGameResults(response);
+                        //es pot veure q no fem servir la mateixa funcio q pels oponents xq la resposta ara te 7 columnes
+                        break ;
+                    case 5: //show games 
+                        // Process the response         
+                        MessageBox.Show("Server response: " + response);
+                        ProcessGameResults(response);
+                        // Close the connection
+                        server.Close();
+                        // HE CREAT UN ALTRE DATAGRIDVIEW
+                        break ;
+                    case 6: //show ranking
+                        // Process the response to fill the DataGridView
+                        MessageBox.Show("Server response: " + response);
+                        ProcessRankingResults(response);
+                        break;
+                    case 9: //notificacion usuarios conectados
+                        string[] cachos = response.Split('/');
+                        connected_users_label.Text = "";
+                        foreach (string s in cachos)
+                        {
+                            connected_users_label.Text += s + Environment.NewLine; // Añade el texto y un salto de línea
+                        }
+                        break;
+                    case 8:
+                        MessageBox.Show("Disconnected from server");
+                        break;
+
+
+                }
+                if (codigo == 8)
+                    break;
+            }
+        }
         private void show_Panel(Panel panel)
         {
             login_panel.Visible = false;
@@ -52,11 +136,14 @@ namespace Battleship
 
             panel.Visible = true;
         }
+        private void mostrar_user_panel(string response)
+        {
+            show_Panel(user_panel);
+        }
 
         private void login_panel_signup_button_Click(object sender, EventArgs e)
         {
             show_Panel(signup_panel);
-
         }
 
         private void signup_panel_signup_button_Click(object sender, EventArgs e)
@@ -74,24 +161,7 @@ namespace Battleship
 
             // Send the signup data to the server
             server.Send(data);
-            Console.WriteLine("Signup data sent: " + signupData);
-
-            // Read the response from the server
-            byte[] responseData = new byte[256];
-            int bytes = server.Receive(responseData);
-            string response = Encoding.ASCII.GetString(responseData, 0, bytes);
-            Console.WriteLine("Server response: " + response);
-            if (response.Contains("6/0"))
-            {
-                MessageBox.Show("Sign Up successful!");
-                show_Panel(login_panel);
-    
-            }
-            else if(response.Contains("6/1"))
-            {
-                MessageBox.Show("Username already taken.");
-            }
-
+            MessageBox.Show("Signup data sent: " + signupData);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -99,14 +169,14 @@ namespace Battleship
             string username = nombre_usuario_label.Text;
 
             // Verifica si el evento se dispara y si el usuario está conectado
-            Console.WriteLine("Cerrando el formulario...");
+            MessageBox.Show("Cerrando el formulario...");
 
             if (!string.IsNullOrEmpty(username))
             {
                 string exitdata = $"8/{username}";
                 byte[] data = Encoding.ASCII.GetBytes(exitdata);
                 server.Send(data);  // Enviar al servidor
-                Console.WriteLine("Mensaje enviado: " + exitdata);  // Verifica el mensaje enviado
+                MessageBox.Show("Mensaje enviado: " + exitdata);  // Verifica el mensaje enviado
             }
 
             // Cerrar la conexión con el servidor
@@ -121,7 +191,7 @@ namespace Battleship
             string username = nombre_usuario_label.Text;
 
             // Verifica si el evento se dispara y si el usuario está conectado
-            Console.WriteLine("Desconectando...");
+            MessageBox.Show("Desconectando...");
 
             // Si el usuario está conectado, enviar el mensaje de desconexión al servidor
             if (!string.IsNullOrEmpty(username))
@@ -129,7 +199,7 @@ namespace Battleship
                 string exitdata = $"8/{username}";
                 byte[] data = Encoding.ASCII.GetBytes(exitdata);
                 server.Send(data);  // Enviar al servidor
-                Console.WriteLine("Mensaje enviado: " + exitdata);  // Verifica el mensaje enviado
+                MessageBox.Show("Mensaje enviado: " + exitdata);  // Verifica el mensaje enviado
             }
 
             //aqui no cerramos la conexion con el servidor, pues queremos aprovechar que ya esta la conexion hecha y solo cambiar de user
@@ -159,28 +229,7 @@ namespace Battleship
 
             // Send the login data to the server
             server.Send(data);
-            Console.WriteLine("Login data sent: " + loginData);
-
-            // Read the response from the server
-            byte[] responseData = new byte[256];
-            int bytesReceived = server.Receive(responseData);
-            string response = Encoding.ASCII.GetString(responseData, 0, bytesReceived);
-            Console.WriteLine("Server response: " + response);
-
-            // Check the server response for login success
-            if (response.Contains("1/1"))
-            {
-                MessageBox.Show("Login successful!");
-                show_Panel(user_panel);
-            }
-            else if (response.Contains("1/2"))
-            {
-                MessageBox.Show("User already connected");
-            }
-            else if (response.Contains("1/3"))
-            {
-                MessageBox.Show("Invalid username or password.");
-            }
+            MessageBox.Show("Login data sent: " + loginData);
         }
 
 
@@ -305,19 +354,10 @@ namespace Battleship
 
                 string username = nombre_usuario_label.Text;
                 string mensaje = $" 3/{username}";
-                Console.WriteLine("data sent:" + mensaje);
+                MessageBox.Show("data sent:" + mensaje);
                 // Enviamos al servidor el nombre tecleado
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg);
-
-                //Recibimos la respuesta del servidor
-                byte[] msg2 = new byte[80];
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                Console.WriteLine("Server response:" + mensaje);
-                ProcessOpponentList(mensaje);
-                
-                // HE CREAT UN ALTRE DATAGRIDVIEW
+                server.Send(msg);              
             }
 
             else if (game_results_radioButton.Checked)
@@ -327,17 +367,8 @@ namespace Battleship
                 string username = nombre_usuario_label.Text;
                 string opponent = opponent_textBox.Text;
                 string mensaje = $"4/{username}/{opponent}";
-                Console.WriteLine("data sent:" + mensaje);
+                MessageBox.Show("data sent:" + mensaje);
                 // Enviar al servidor el mensaje
-
-                // Recibir la respuesta del servidor
-                byte[] msg2 = new byte[512];  // Cambié el tamaño para permitir más datos
-                server.Receive(msg2);
-                mensaje = Encoding.ASCII.GetString(msg2).Split('\0')[0];
-                Console.WriteLine("Server response: " + mensaje);
-                // Procesar la respuesta para llenar el DataGridView
-                ProcessGameResults(mensaje);
-                //es pot veure q no fem servir la mateixa funcio q pels oponents xq la resposta ara te 7 columnes
             }
 
             else if (games_sort_date_radioButton.Checked)
@@ -355,24 +386,11 @@ namespace Battleship
 
                 // Prepare the message to send
                 string mensaje = $"5/{username}/{formattedInitialDate}/{formattedEndingDate}";
-                Console.WriteLine("data sent:" + mensaje);
+                MessageBox.Show("data sent:" + mensaje);
                 // Send the message to the server
                 byte[] msg = Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg); // Sending the message using server.Client.Send
 
-                // Receive the response from the server
-                byte[] msg2 = new byte[512];  // Size for receiving data
-                int bytesRead = server.Receive(msg2); // Receiving the response
-
-                // Process the response
-                string response = Encoding.ASCII.GetString(msg2, 0, bytesRead);
-                Console.WriteLine("Server response: " + response);
-                ProcessGameResults(response);
-
-                // Close the connection
-                server.Close();
-
-                // HE CREAT UN ALTRE DATAGRIDVIEW
             }
             else if (ranking_radioButton.Checked)
             {
@@ -382,24 +400,12 @@ namespace Battleship
                 // Send the message to the server
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
                 server.Send(msg);
-                Console.WriteLine("data sent: " + mensaje);
-                // Prepare to receive the response from the server
-                byte[] msg2 = new byte[512];  // Increased size for more data
-                int bytesReceived = server.Receive(msg2);
-
-                // Convert the received bytes to a string
-                mensaje = Encoding.ASCII.GetString(msg2, 0, bytesReceived).TrimEnd('\0');
-
-                // Process the response to fill the DataGridView
-                Console.WriteLine("Server response: " + mensaje);
-                ProcessRankingResults(mensaje);
+                
+                MessageBox.Show("data sent: " + mensaje);   
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        
 
         private void user_panel_Paint(object sender, PaintEventArgs e)
         {
@@ -409,6 +415,37 @@ namespace Battleship
         private void back_button_Click(object sender, EventArgs e)
         {
             show_Panel(login_panel);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void connect_server_button_Click(object sender, EventArgs e)
+        {
+            IPAddress direc = IPAddress.Parse("192.168.56.101");
+            IPEndPoint ipep = new IPEndPoint(direc, 8050);
+
+            server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            // Intentar conectar al servidor
+            try
+            {
+                server.Connect(ipep);
+                MessageBox.Show("Connection successful", "Connection Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (SocketException ex)
+            {
+                MessageBox.Show("Connection failed: " + ex.Message, "Connection Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //pongo en marcha el thread que atenderá los mensajes del servidor 
+            ThreadStart ts = delegate { AtenderServidor(); };
+            atender = new Thread(ts);
+            atender.Start();
+
+            CheckForIllegalCrossThreadCalls = false;
         }
     }
 }

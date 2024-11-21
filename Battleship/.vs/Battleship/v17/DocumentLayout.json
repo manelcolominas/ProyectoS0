@@ -1,42 +1,22 @@
 {
   "Version": 1,
-<<<<<<< HEAD
-  "WorkspaceRootPath": "C:\\SO\\projecte\\new\\Battleship\\",
+  "WorkspaceRootPath": "C:\\SO\\projecte\\versio #3\\Battleship\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\new\\Battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\projecte\\new\\battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\projecte\\versio #3\\battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\new\\Battleship\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\new\\Battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\versio #3\\Battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-=======
-  "WorkspaceRootPath": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|c:\\so\\proyectoso\\version #2\\battleship\\newgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|solutionrelative:newgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|C:\\SO\\proyectoSO\\Version #2\\Battleship\\newgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|solutionrelative:newgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\versio #3\\Battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|C:\\SO\\proyectoSO\\Version #2\\Battleship\\battleship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|solutionrelative:battleship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|C:\\SO\\proyectoSO\\Version #2\\Battleship\\battleship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3AE4FB55-6F61-44DB-AD1A-91CDED1DB6C0}|Battleship.csproj|solutionrelative:battleship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\projecte\\versio #3\\Battleship\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,43 +26,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-<<<<<<< HEAD
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
-              "DocumentMoniker": "C:\\SO\\projecte\\new\\Battleship\\Form1.cs",
+              "DocumentMoniker": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\SO\\projecte\\new\\Battleship\\Form1.cs",
+              "ToolTip": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAFsBAAAAAAAAAAAawIIAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAjwCoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.036Z",
-=======
-              "DocumentIndex": 3,
-              "Title": "Battleship.cs",
-              "DocumentMoniker": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\Battleship.cs",
-              "RelativeDocumentMoniker": "Battleship.cs",
-              "ToolTip": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\Battleship.cs",
-              "RelativeToolTip": "Battleship.cs",
-              "ViewState": "AgIAABMCAAAAAAAAAAAAAD0CAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "OverriddenGroupName": "",
-              "WhenOpened": "2024-10-06T08:35:57.056Z",
->>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-<<<<<<< HEAD
+              "DocumentIndex": 2,
               "Title": "Form1.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\SO\\projecte\\new\\Battleship\\Form1.cs",
+              "DocumentMoniker": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "C:\\SO\\projecte\\new\\Battleship\\Form1.cs [Dise\u00F1o]",
+              "ToolTip": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.cs [Dise\u00F1o]",
               "RelativeToolTip": "Form1.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.701Z",
@@ -91,67 +57,37 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Form1.Designer.cs",
-              "DocumentMoniker": "C:\\SO\\projecte\\new\\Battleship\\Form1.Designer.cs",
+              "DocumentMoniker": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "Form1.Designer.cs",
-              "ToolTip": "C:\\SO\\projecte\\new\\Battleship\\Form1.Designer.cs",
+              "ToolTip": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.Designer.cs",
               "RelativeToolTip": "Form1.Designer.cs",
-              "ViewState": "AgIAABEBAAAAAAAAAAD4vygBAABHAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.708Z",
-=======
-              "Title": "NewGame.cs",
-              "DocumentMoniker": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\NewGame.cs",
-              "RelativeDocumentMoniker": "NewGame.cs",
-              "ToolTip": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\NewGame.cs",
-              "RelativeToolTip": "NewGame.cs",
-              "ViewState": "AgIAAHoAAAAAAAAAAADwv4oAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-20T10:44:07.131Z",
-              "IsPinned": true,
->>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-<<<<<<< HEAD
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\SO\\projecte\\new\\Battleship\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\SO\\projecte\\new\\Battleship\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T14:18:39.711Z"
-=======
               "DocumentIndex": 1,
-              "Title": "NewGame.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\NewGame.cs",
-              "RelativeDocumentMoniker": "NewGame.cs",
-              "ToolTip": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\NewGame.cs [Dise\u00F1o]",
-              "RelativeToolTip": "NewGame.cs [Dise\u00F1o]",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\SO\\projecte\\versio #3\\Battleship\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\SO\\projecte\\versio #3\\Battleship\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAnwBIAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-20T09:06:18.479Z",
-              "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Battleship.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\Battleship.cs",
-              "RelativeDocumentMoniker": "Battleship.cs",
-              "ToolTip": "C:\\SO\\proyectoSO\\Version #2\\Battleship\\Battleship.cs [Dise\u00F1o]",
-              "RelativeToolTip": "Battleship.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T08:35:57.386Z",
-              "EditorCaption": " [Dise\u00F1o]"
->>>>>>> 96b8ca533ab4810a3c076129f3b054e2a7c8ac93
+              "WhenOpened": "2024-11-17T14:18:39.711Z",
+              "EditorCaption": ""
             }
           ]
         }

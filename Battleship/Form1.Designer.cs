@@ -46,6 +46,8 @@
             this.signup_panel_password_textBox = new System.Windows.Forms.TextBox();
             this.signup_panel_username_textBox = new System.Windows.Forms.TextBox();
             this.user_panel = new System.Windows.Forms.Panel();
+            this.connected_users_label = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.ending_dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.initial_dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.dataGridView = new System.Windows.Forms.DataGridView();
@@ -63,6 +65,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.nombre_usuario_label = new System.Windows.Forms.Label();
             this.desconnect_server__button = new System.Windows.Forms.Button();
+            this.connect_server_button = new System.Windows.Forms.Button();
             this.login_panel.SuspendLayout();
             this.signup_panel.SuspendLayout();
             this.user_panel.SuspendLayout();
@@ -73,6 +76,7 @@
             // login_panel
             // 
             this.login_panel.BackColor = System.Drawing.Color.Transparent;
+            this.login_panel.Controls.Add(this.connect_server_button);
             this.login_panel.Controls.Add(this.label9);
             this.login_panel.Controls.Add(this.login_panel_signup_button);
             this.login_panel.Controls.Add(this.login_panel_login_button);
@@ -109,7 +113,7 @@
             // 
             // login_panel_login_button
             // 
-            this.login_panel_login_button.BackColor = System.Drawing.Color.LightGreen;
+            this.login_panel_login_button.BackColor = System.Drawing.Color.SkyBlue;
             this.login_panel_login_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.login_panel_login_button.Location = new System.Drawing.Point(434, 122);
             this.login_panel_login_button.Margin = new System.Windows.Forms.Padding(2);
@@ -261,6 +265,9 @@
             // 
             this.user_panel.AutoSize = true;
             this.user_panel.BackColor = System.Drawing.Color.White;
+            this.user_panel.Controls.Add(this.desconnect_server__button);
+            this.user_panel.Controls.Add(this.connected_users_label);
+            this.user_panel.Controls.Add(this.label10);
             this.user_panel.Controls.Add(this.ending_dateTimePicker);
             this.user_panel.Controls.Add(this.initial_dateTimePicker);
             this.user_panel.Controls.Add(this.dataGridView);
@@ -283,6 +290,24 @@
             this.user_panel.Size = new System.Drawing.Size(1456, 732);
             this.user_panel.TabIndex = 4;
             this.user_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.user_panel_Paint);
+            // 
+            // connected_users_label
+            // 
+            this.connected_users_label.AutoSize = true;
+            this.connected_users_label.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.connected_users_label.Location = new System.Drawing.Point(1097, 64);
+            this.connected_users_label.Name = "connected_users_label";
+            this.connected_users_label.Size = new System.Drawing.Size(2, 18);
+            this.connected_users_label.TabIndex = 47;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(1094, 39);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(174, 16);
+            this.label10.TabIndex = 46;
+            this.label10.Text = "USUARIOS CONECTADOS";
             // 
             // ending_dateTimePicker
             // 
@@ -452,6 +477,7 @@
             this.pictureBox1.Size = new System.Drawing.Size(956, 576);
             this.pictureBox1.TabIndex = 45;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // nombre_usuario_label
             // 
@@ -467,7 +493,7 @@
             this.desconnect_server__button.BackColor = System.Drawing.Color.Firebrick;
             this.desconnect_server__button.Font = new System.Drawing.Font("Trebuchet MS", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.desconnect_server__button.ForeColor = System.Drawing.SystemColors.Control;
-            this.desconnect_server__button.Location = new System.Drawing.Point(41, 29);
+            this.desconnect_server__button.Location = new System.Drawing.Point(31, 29);
             this.desconnect_server__button.Margin = new System.Windows.Forms.Padding(2);
             this.desconnect_server__button.Name = "desconnect_server__button";
             this.desconnect_server__button.Size = new System.Drawing.Size(145, 53);
@@ -476,6 +502,18 @@
             this.desconnect_server__button.UseVisualStyleBackColor = false;
             this.desconnect_server__button.Click += new System.EventHandler(this.desconnect_server__button_Click);
             // 
+            // connect_server_button
+            // 
+            this.connect_server_button.BackColor = System.Drawing.Color.LightGreen;
+            this.connect_server_button.Font = new System.Drawing.Font("Trebuchet MS", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.connect_server_button.Location = new System.Drawing.Point(36, 27);
+            this.connect_server_button.Name = "connect_server_button";
+            this.connect_server_button.Size = new System.Drawing.Size(177, 44);
+            this.connect_server_button.TabIndex = 7;
+            this.connect_server_button.Text = "connect to server";
+            this.connect_server_button.UseVisualStyleBackColor = false;
+            this.connect_server_button.Click += new System.EventHandler(this.connect_server_button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -483,7 +521,6 @@
             this.BackgroundImage = global::Battleship.Properties.Resources.fondo_inici;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1456, 732);
-            this.Controls.Add(this.desconnect_server__button);
             this.Controls.Add(this.nombre_usuario_label);
             this.Controls.Add(this.login_panel);
             this.Controls.Add(this.signup_panel);
@@ -543,6 +580,9 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button back_button;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label connected_users_label;
+        private System.Windows.Forms.Button connect_server_button;
     }
 }
 
