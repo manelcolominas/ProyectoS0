@@ -136,6 +136,23 @@ void broadcast_message(char* notification, char* username, char* response) {
 	
 	pthread_mutex_unlock(&mutex); // Desbloqueo
 }
+
+int give_me_socket(connected_users_list *list, char username[256]){
+	// Retorna la posición en la lista o -1 si no est￡ en la llista.
+	int i = 0;
+	int socket;
+	int found = 0 ;
+	while (!found && i < list->num)
+	{
+		if (strcmp(list->connected_users[i].username ,username)== 0){
+			found = 1;
+			socket = list->connected_users[i].socket;
+			return socket;
+		}
+		i = i+1;
+	}
+	if (!found) return -1;
+}
 ///////////////////////////
 // codificaci�n missatges de sortida del servidor
 /*	1-registro*/
@@ -609,7 +626,28 @@ void show_rankings(char entrada[512], char respuesta[512]) {
 	mysql_close(conn);
 }
 
-
+void handle_game_invitation(connected_users_list *list, char entrada[512], char respuesta[512]) {
+	char username[100];
+	char opponent[100];
+	char opponent_response[100];
+	char agregar[100];
+	char invitation[100];
+	
+	char *p = strtok(entrada, "/");
+	p = strtok(NULL, "/");
+	strcpy(username, p);
+	p = strtok(NULL, "/");
+	strcpy(opponent, p);
+	int j;
+	
+	int socket_ooponent;
+	strcpy(invitation,"7*/");
+	strcat(invitation,username);
+	//strcat(invitation,"/");
+	//printf(invitation);
+	socket_ooponent = give_me_socket(list,opponent);
+	write(socket_ooponent,invitation ,strlen(invitation));
+}
 
 void *AtenderCliente(void *socket){
 	int sock_conn;
@@ -688,7 +726,10 @@ void *AtenderCliente(void *socket){
 			printf("Respuesta: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
 		}
-		
+		else if (codigo == 7){
+			char agregar[10] = "7*\n";
+			handle_game_invitation(&my_connected_users_list,peticionInicial,respuesta);
+		}
 		else if (codigo == 8){  // Eliminar a un jugador de la lista de conectados
 			pthread_mutex_lock( &mutex);
 			delete_user(&my_connected_users_list, peticionInicial);
@@ -711,20 +752,13 @@ int main(int argc, char *argv[]){
 		int sock_conn, sock_listen;
 		struct sockaddr_in serv_adr;
 		
-		//SQL Comandos
-		conn = mysql_init(NULL);
-		if (conn==NULL)
-		{
-			printf ("Error_1 al crear la conexion: %u %s\n",mysql_errno(conn), mysql_error(conn));
-			exit (1);
-		}
-		conn = mysql_real_connect (conn, "localhost","root", "mysql", "battleship_database",0, NULL, 0);
-		if (conn==NULL)
-		{
-			printf ("Error_2 al inicializar la conexion: %u %s\n",
-					mysql_errno(conn), mysql_error(conn));
-			exit (1);
-		}
+		
+/*		add_user(&my_connected_users_list,"manel007",007);*/
+		//add_user(&my_connected_users_list,"esther789",789);
+/*		char respuesta[200];*/
+/*		char entrada[200]; */
+/*		strcpy(entrada,"2/manel007/esther789") ;*/
+/*		handle_game_invitation(&my_connected_users_list,entrada,respuesta);*/
 		
 		// Obrim el socket
 		if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)

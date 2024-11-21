@@ -25,6 +25,7 @@ namespace Battleship
             login_panel.Visible = false;
             signup_panel.Visible = false;
             user_panel.Visible = false;
+            invitation_panel.Visible= false;
             show_Panel(login_panel);
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -89,7 +90,6 @@ namespace Battleship
                             ProcessOpponentList(response);
                             // HE CREAT UN ALTRE DATAGRIDVIEW
                         }
-
                         break;
                     case 4: //consultar oponente
                         MessageBox.Show("Server response: " + response);
@@ -109,6 +109,13 @@ namespace Battleship
                         // Process the response to fill the DataGridView
                         MessageBox.Show("Server response: " + response);
                         ProcessRankingResults(response);
+                        break;
+                    case 7:
+                        string[] opponent = trozos_respuesta[1].Split('/');
+                        MessageBox.Show($"User {opponent[1]} invites you to play a game.");
+                        //this.Invoke(new Action(() => { mostrar_user_panel(response); }));
+                        this.Invoke(new Action(() => { show_invitation_panel(response); }));
+ 
                         break;
                     case 9: //notificacion usuarios conectados
                         string[] cachos = response.Split('/');
@@ -133,12 +140,18 @@ namespace Battleship
             login_panel.Visible = false;
             signup_panel.Visible = false;
             user_panel.Visible = false;
+            invitation_panel.Visible = false;
 
             panel.Visible = true;
         }
         private void mostrar_user_panel(string response)
         {
             show_Panel(user_panel);
+        }
+
+        private void show_invitation_panel(string response)
+        {
+            show_Panel(invitation_panel);
         }
 
         private void login_panel_signup_button_Click(object sender, EventArgs e)
@@ -403,6 +416,16 @@ namespace Battleship
                 
                 MessageBox.Show("data sent: " + mensaje);   
             }
+            else if (game_invitation_radioButton.Checked)
+            {
+                string username = nombre_usuario_label.Text;
+                string opponent = game_invitation_textBox.Text;
+                string mensaje = $"7/{username}/{opponent}"; // Operation code for showing rankings
+
+                // Send the message to the server
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                server.Send(msg);
+            }
         }
 
         
@@ -424,7 +447,7 @@ namespace Battleship
 
         private void connect_server_button_Click(object sender, EventArgs e)
         {
-            IPAddress direc = IPAddress.Parse("192.168.56.101");
+            IPAddress direc = IPAddress.Parse("192.168.56.102");
             IPEndPoint ipep = new IPEndPoint(direc, 8050);
 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -446,6 +469,11 @@ namespace Battleship
             atender.Start();
 
             CheckForIllegalCrossThreadCalls = false;
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
