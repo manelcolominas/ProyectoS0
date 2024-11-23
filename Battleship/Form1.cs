@@ -25,8 +25,7 @@ namespace Battleship
             login_panel.Visible = false;
             signup_panel.Visible = false;
             user_panel.Visible = false;
-            invitation_panel.Visible= false;
-            show_Panel(login_panel);
+            connect_server_button.Visible= true;
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -67,7 +66,7 @@ namespace Battleship
                         if (response.Contains("1/1"))
                         {
                             MessageBox.Show("Login successful!");
-                            this.Invoke(new Action (() => { mostrar_user_panel(response);  }));
+                            this.Invoke(new Action(() => { mostrar_user_panel(response); }));
                         }
                         else if (response.Contains("1/2"))
                         {
@@ -96,7 +95,7 @@ namespace Battleship
                         // Procesar la respuesta para llenar el DataGridView
                         ProcessGameResults(response);
                         //es pot veure q no fem servir la mateixa funcio q pels oponents xq la resposta ara te 7 columnes
-                        break ;
+                        break;
                     case 5: //show games 
                         // Process the response         
                         MessageBox.Show("Server response: " + response);
@@ -104,7 +103,7 @@ namespace Battleship
                         // Close the connection
                         server.Close();
                         // HE CREAT UN ALTRE DATAGRIDVIEW
-                        break ;
+                        break;
                     case 6: //show ranking
                         // Process the response to fill the DataGridView
                         MessageBox.Show("Server response: " + response);
@@ -112,11 +111,43 @@ namespace Battleship
                         break;
                     case 7:
                         string[] opponent = trozos_respuesta[1].Split('/');
-                        MessageBox.Show($"User {opponent[1]} invites you to play a game.");
-                        //this.Invoke(new Action(() => { mostrar_user_panel(response); }));
-                        this.Invoke(new Action(() => { show_invitation_panel(response); }));
- 
+                        if (opponent[1] == "1") // Invitacions
+                        { 
+                                DialogResult respuesta = MessageBox.Show("Do you accept ?",
+                                    $"User {opponent[2]} invites you to play a game.",
+                                        MessageBoxButtons.YesNo // Icono
+                                    );
+                                string username = nombre_usuario_label.Text;
+                                string serviceCode = "7";  //
+                                string type_of_message = "2"; // Respostes
+
+                                if (respuesta == DialogResult.Yes)
+                                {
+                                    string bool_respuesta = "1"; // Afirmatiu
+                                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
+                                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                                    server.Send(data);
+                            }
+                                else if (respuesta == DialogResult.No)
+                                {
+                                    string bool_respuesta = "0"; // negatiu
+                                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
+                                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                                    server.Send(data);
+                                }
+                        }
+                        else if (opponent[1] == "2") {
+                            if (opponent[2] == "1")
+                            {
+                                MessageBox.Show($"{opponent[3]} has accept your game invitation.");
+                                // Aquí s'hauria d'obrir la interficie de joc i començara jugar
+                            }
+                            else if (opponent[2] == "0") { 
+                            }
+                            MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
+                            }
                         break;
+
                     case 9: //notificacion usuarios conectados
                         string[] cachos = response.Split('/');
                         connected_users_label.Text = "";
@@ -140,18 +171,12 @@ namespace Battleship
             login_panel.Visible = false;
             signup_panel.Visible = false;
             user_panel.Visible = false;
-            invitation_panel.Visible = false;
 
             panel.Visible = true;
         }
         private void mostrar_user_panel(string response)
         {
             show_Panel(user_panel);
-        }
-
-        private void show_invitation_panel(string response)
-        {
-            show_Panel(invitation_panel);
         }
 
         private void login_panel_signup_button_Click(object sender, EventArgs e)
@@ -166,7 +191,6 @@ namespace Battleship
             string password = signup_panel_password_textBox.Text;
             string email = signup_panel_email_textBox.Text;
             string serviceCode = "1";  // 1 for signup
-
 
             // Prepare the signup data using ASCII encoding
             string signupData = $"{serviceCode}/{username}/{email}/{password}";
@@ -420,10 +444,12 @@ namespace Battleship
             {
                 string username = nombre_usuario_label.Text;
                 string opponent = game_invitation_textBox.Text;
-                string mensaje = $"7/{username}/{opponent}"; // Operation code for showing rankings
 
+                string serviceCode = "7";  // 1 for signup
+                string type_of_message = "1"; // Invitacions
+                string data_to_send = $"{serviceCode}/{type_of_message}/{username}/{opponent}";
                 // Send the message to the server
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(mensaje);
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(data_to_send);
                 server.Send(msg);
             }
         }
@@ -457,6 +483,8 @@ namespace Battleship
             {
                 server.Connect(ipep);
                 MessageBox.Show("Connection successful", "Connection Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                show_Panel(login_panel);
+                connect_server_button.Visible= false;
             }
             catch (SocketException ex)
             {

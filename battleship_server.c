@@ -629,24 +629,48 @@ void show_rankings(char entrada[512], char respuesta[512]) {
 void handle_game_invitation(connected_users_list *list, char entrada[512], char respuesta[512]) {
 	char username[100];
 	char opponent[100];
-	char opponent_response[100];
-	char agregar[100];
-	char invitation[100];
+	char response[100];
+	char data_to_send[100];
+	char type_of_message[100];
+	
+	//string data_to_send = $"{serviceCode}/{type_of_message}/{username}/{opponent}";
+	// type_of_message = 1 invitations
+	// type_of_message = 2 respostes
 	
 	char *p = strtok(entrada, "/");
 	p = strtok(NULL, "/");
-	strcpy(username, p);
-	p = strtok(NULL, "/");
-	strcpy(opponent, p);
-	int j;
+	strcpy(type_of_message, p);
 	
 	int socket_ooponent;
-	strcpy(invitation,"7*/");
-	strcat(invitation,username);
-	//strcat(invitation,"/");
-	//printf(invitation);
+	if(strcmp(type_of_message,"1")==0){
+		p = strtok(NULL, "/");
+		strcpy(username, p);
+		p = strtok(NULL, "/");
+		strcpy(opponent, p);
+		
+		strcpy(data_to_send,"7*/");
+		strcat(data_to_send,"1/");
+		strcat(data_to_send,username);
+/*		socket_ooponent = give_me_socket(list,opponent);*/
+/*		write(socket_ooponent,data_to_send ,strlen(data_to_send));*/
+	}
+	if(strcmp(type_of_message,"2")==0){
+		p = strtok(NULL, "/");
+		strcpy(response, p);
+		p = strtok(NULL, "/");
+		strcpy(username, p);
+		p = strtok(NULL, "/");
+		strcpy(opponent, p);
+		strcpy(data_to_send,"7*/");
+		strcat(data_to_send,"2/");
+		strcat(data_to_send,response);
+		strcat(data_to_send,"/");
+		strcat(data_to_send,username);
+/*		socket_ooponent = give_me_socket(list,opponent);*/
+/*		write(socket_ooponent,data_to_send ,strlen(data_to_send));*/
+	}
 	socket_ooponent = give_me_socket(list,opponent);
-	write(socket_ooponent,invitation ,strlen(invitation));
+	write(socket_ooponent,data_to_send ,strlen(data_to_send));
 }
 
 void *AtenderCliente(void *socket){
@@ -728,7 +752,9 @@ void *AtenderCliente(void *socket){
 		}
 		else if (codigo == 7){
 			char agregar[10] = "7*\n";
+			pthread_mutex_lock( &mutex);
 			handle_game_invitation(&my_connected_users_list,peticionInicial,respuesta);
+			pthread_mutex_unlock( &mutex);
 		}
 		else if (codigo == 8){  // Eliminar a un jugador de la lista de conectados
 			pthread_mutex_lock( &mutex);

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.login_panel = new System.Windows.Forms.Panel();
-            this.connect_server_button = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.login_panel_signup_button = new System.Windows.Forms.Button();
             this.login_panel_login_button = new System.Windows.Forms.Button();
@@ -37,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.login_panel_password_textBox = new System.Windows.Forms.TextBox();
             this.login_panel_username_textBox = new System.Windows.Forms.TextBox();
+            this.connect_server_button = new System.Windows.Forms.Button();
             this.signup_panel = new System.Windows.Forms.Panel();
             this.back_button = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -67,7 +67,6 @@
             this.new_game_User_panel_button = new System.Windows.Forms.Button();
             this.resume_game_User_panel_button = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.invitation_panel = new System.Windows.Forms.Panel();
             this.nombre_usuario_label = new System.Windows.Forms.Label();
             this.login_panel.SuspendLayout();
             this.signup_panel.SuspendLayout();
@@ -79,7 +78,6 @@
             // login_panel
             // 
             this.login_panel.BackColor = System.Drawing.Color.Transparent;
-            this.login_panel.Controls.Add(this.connect_server_button);
             this.login_panel.Controls.Add(this.label9);
             this.login_panel.Controls.Add(this.login_panel_signup_button);
             this.login_panel.Controls.Add(this.login_panel_login_button);
@@ -92,19 +90,6 @@
             this.login_panel.Name = "login_panel";
             this.login_panel.Size = new System.Drawing.Size(1657, 596);
             this.login_panel.TabIndex = 2;
-            // 
-            // connect_server_button
-            // 
-            this.connect_server_button.BackColor = System.Drawing.Color.LightGreen;
-            this.connect_server_button.Font = new System.Drawing.Font("Trebuchet MS", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.connect_server_button.Location = new System.Drawing.Point(63, 49);
-            this.connect_server_button.Margin = new System.Windows.Forms.Padding(5);
-            this.connect_server_button.Name = "connect_server_button";
-            this.connect_server_button.Size = new System.Drawing.Size(310, 80);
-            this.connect_server_button.TabIndex = 7;
-            this.connect_server_button.Text = "connect to server";
-            this.connect_server_button.UseVisualStyleBackColor = false;
-            this.connect_server_button.Click += new System.EventHandler(this.connect_server_button_Click);
             // 
             // label9
             // 
@@ -178,6 +163,19 @@
             this.login_panel_username_textBox.Name = "login_panel_username_textBox";
             this.login_panel_username_textBox.Size = new System.Drawing.Size(251, 35);
             this.login_panel_username_textBox.TabIndex = 0;
+            // 
+            // connect_server_button
+            // 
+            this.connect_server_button.BackColor = System.Drawing.Color.LightGreen;
+            this.connect_server_button.Font = new System.Drawing.Font("Trebuchet MS", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.connect_server_button.Location = new System.Drawing.Point(55, 196);
+            this.connect_server_button.Margin = new System.Windows.Forms.Padding(5);
+            this.connect_server_button.Name = "connect_server_button";
+            this.connect_server_button.Size = new System.Drawing.Size(310, 80);
+            this.connect_server_button.TabIndex = 7;
+            this.connect_server_button.Text = "connect to server";
+            this.connect_server_button.UseVisualStyleBackColor = false;
+            this.connect_server_button.Click += new System.EventHandler(this.connect_server_button_Click);
             // 
             // signup_panel
             // 
@@ -283,7 +281,6 @@
             // 
             this.user_panel.AutoSize = true;
             this.user_panel.BackColor = System.Drawing.Color.White;
-            this.user_panel.Controls.Add(this.invitation_panel);
             this.user_panel.Controls.Add(this.game_invitation_textBox);
             this.user_panel.Controls.Add(this.game_invitation_radioButton);
             this.user_panel.Controls.Add(this.desconnect_server__button);
@@ -539,15 +536,6 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // invitation_panel
-            // 
-            this.invitation_panel.BackColor = System.Drawing.Color.Red;
-            this.invitation_panel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.invitation_panel.Location = new System.Drawing.Point(0, 0);
-            this.invitation_panel.Name = "invitation_panel";
-            this.invitation_panel.Size = new System.Drawing.Size(2548, 1327);
-            this.invitation_panel.TabIndex = 48;
-            // 
             // nombre_usuario_label
             // 
             this.nombre_usuario_label.AutoSize = true;
@@ -568,6 +556,7 @@
             this.Controls.Add(this.login_panel);
             this.Controls.Add(this.signup_panel);
             this.Controls.Add(this.user_panel);
+            this.Controls.Add(this.connect_server_button);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
@@ -626,7 +615,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label connected_users_label;
         private System.Windows.Forms.Button connect_server_button;
-        private System.Windows.Forms.Panel invitation_panel;
         private System.Windows.Forms.RadioButton game_invitation_radioButton;
         private System.Windows.Forms.TextBox game_invitation_textBox;
     }
