@@ -626,29 +626,71 @@ void show_rankings(char entrada[512], char respuesta[512]) {
 	mysql_close(conn);
 }
 
-void handle_game_invitation(connected_users_list *list, char entrada[512], char respuesta[512]) {
-	char username[100];
-	char opponent[100];
-	char opponent_response[100];
-	char agregar[100];
-	char invitation[100];
-	
-	char *p = strtok(entrada, "/");
-	p = strtok(NULL, "/");
-	strcpy(username, p);
-	p = strtok(NULL, "/");
-	strcpy(opponent, p);
-	int j;
-	
-	int socket_ooponent;
-	strcpy(invitation,"7*/");
-	strcat(invitation,username);
-	//strcat(invitation,"/");
-	//printf(invitation);
-	socket_ooponent = give_me_socket(list,opponent);
-	write(socket_ooponent,invitation ,strlen(invitation));
-}
 
+void handle_game_invitation(connected_users_list *list, char entrada[512], char respuesta[512]) {
+    char username[100];
+    char opponent[100];
+    char opponent_response[100];
+    char agregar[100];
+    char invitation[100];
+
+    // Obtenemos el nombre del invitador y oponente
+    char *p = strtok(entrada, "/");
+    p = strtok(NULL, "/");
+    strcpy(username, p); // Invitador
+    p = strtok(NULL, "/");
+    strcpy(opponent, p); // Invitado
+
+    int socket_opponent;
+    strcpy(invitation, "7*/");
+    strcat(invitation, username);
+
+    // Enviamos invitación
+    socket_opponent = give_me_socket(list, opponent);
+    if (write(socket_opponent, invitation, strlen(invitation)) < 0) {
+        sprintf(respuesta, "Error: No se pudo enviar la invitación a %s", opponent);
+        return;
+    }
+    printf("Invitación enviada a %s\n", opponent);
+
+    // Esperamos la respuesta del oponente
+    int bytes_received = read(socket_opponent, opponent_response, sizeof(opponent_response) - 1);
+    if (bytes_received > 0) {
+        opponent_response[bytes_received] = '\0'; // Aseguramos que la respuesta tenga terminador nulo
+        printf("Respuesta recibida de %s: %s\n", opponent, opponent_response);
+
+        // Procesamos la respuesta
+        if (strcmp(opponent_response, "1") == 0) {
+            // El oponente aceptó la invitación
+            sprintf(respuesta, "El jugador %s aceptó la invitación", opponent);
+            printf("Partida aceptada por %s\n", opponent);
+        } else if (strcmp(opponent_response, "-1") == 0) {
+            // El oponente rechazó la invitación
+            sprintf(respuesta, "El jugador %s rechazó la invitación", opponent);
+            printf("Partida rechazada por %s\n", opponent);
+        } else {
+            // Respuesta inválida
+            sprintf(respuesta, "Error: Respuesta inválida recibida de %s", opponent);
+            printf("Respuesta inválida de %s\n", opponent);
+        }
+    } else {
+        // No se recibió respuesta del oponente
+        sprintf(respuesta, "Error: No se recibió respuesta de %s", opponent);
+        printf("Error: No se recibió respuesta de %s\n", opponent);
+    }
+
+    // Notificamos al invitador del resultado de la invitación
+    int socket_user = give_me_socket(list, username);
+    if (socket_user > 0) {
+        if (write(socket_user, respuesta, strlen(respuesta)) < 0) {
+            printf("Error: No se pudo notificar a %s\n", username);
+        } else {
+            printf("Resultado notificado a %s: %s\n", username, respuesta);
+        }
+    } else {
+        printf("Error: No se encontró el socket para %s\n", username);
+    }
+}
 void *AtenderCliente(void *socket){
 	int sock_conn;
 	int *s;
