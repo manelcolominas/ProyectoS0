@@ -142,9 +142,9 @@ namespace Battleship
                                 MessageBox.Show($"{opponent[3]} has accept your game invitation.");
                                 // Aquí s'hauria d'obrir la interficie de joc i començara jugar
                             }
-                            else if (opponent[2] == "0") { 
+                            else if (opponent[2] == "0") {
+                                MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
                             }
-                            MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
                             }
                         break;
 
