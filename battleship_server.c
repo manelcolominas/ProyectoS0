@@ -460,7 +460,7 @@ void list_of_games(char entrada[512], char respuesta[512]) {
 	// Construir la lista de oponentes
 	while ((row = mysql_fetch_row(res)) != NULL) {
 		char opponent_info[256];
-		sprintf(opponent_info,"%s\n", row[0]);
+		sprintf(opponent_info,"%s/", row[0]); // Molt important treure el barra n
 		if (strlen(buffer) + strlen(opponent_info) < sizeof(buffer)) {
 			strcat(buffer, opponent_info);
 		} else {
@@ -744,11 +744,12 @@ void *AtenderCliente(void *socket){
 		}
 		
 		else if(codigo == 6){  // Mostrar rankings
-			char agregar[10] = "6*\n";
+			char agregar[2000] = "6*\n";
 			show_rankings(peticionInicial, respuesta);
 			strcat(agregar,respuesta);
 			printf("Respuesta: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
+			//write (sock_conn, agregar, sizeof(agregar)-1);
 		}
 		else if (codigo == 7){
 			char agregar[10] = "7*\n";
@@ -760,10 +761,10 @@ void *AtenderCliente(void *socket){
 			pthread_mutex_lock( &mutex);
 			delete_user(&my_connected_users_list, peticionInicial);
 			show_connected_users(&my_connected_users_list);
-			terminar = 1;
+			//terminar = 1; // ho comenttat per  aue així no perdi la connexió amb l'usuari
 			pthread_mutex_unlock( &mutex);
-			char agregar[10] = "8*\n";
-			write (sock_conn, agregar, strlen(agregar));
+/*			char agregar[10] = "8*\n";*/
+/*			write (sock_conn, agregar, strlen(agregar));*/
 		}
 		
 		else{

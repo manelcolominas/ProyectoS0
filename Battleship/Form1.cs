@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Schema;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Battleship
@@ -19,6 +20,7 @@ namespace Battleship
     {
         Socket server;
         Thread atender;
+        string username_of_the_connection;
         public Form1()
         {
             InitializeComponent();
@@ -26,12 +28,12 @@ namespace Battleship
             signup_panel.Visible = false;
             user_panel.Visible = false;
             connect_server_button.Visible= true;
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
-
 
         //función que escucha constantemente al servidor y procesa sus mensajes
         private void AtenderServidor()
@@ -66,6 +68,9 @@ namespace Battleship
                         if (response.Contains("1/1"))
                         {
                             MessageBox.Show("Login successful!");
+                            string username = login_panel_username_textBox.Text;
+                            set_username(username);
+                            nombre_usuario_label.Text = username;
                             this.Invoke(new Action(() => { mostrar_user_panel(response); }));
                         }
                         else if (response.Contains("1/2"))
@@ -77,37 +82,39 @@ namespace Battleship
                             MessageBox.Show("Invalid username or password.");
                         }
                         break;
-                    case 3: //list of games
+                    case 3: //list of games // eseña a lista de partidas realizadas del usuaio con todos sus oponentes
                         string[] trozos = response.Split('/');
                         if (trozos[0] == "3")
                         {
-                            MessageBox.Show("No se encontraron oponentes")
-                            ;
+                            MessageBox.Show("No se encontraron oponentes");
                         }
-                        else {
+                        else 
+                        {
+                            //   "\nEsther789/Hugo123/User2/"
                             MessageBox.Show("Server response:" + response);
-                            ProcessOpponentList(response);
-                            // HE CREAT UN ALTRE DATAGRIDVIEW
+                            this.Invoke(new Action(() => { ProcessOpponentList(response); }));
+                            //ProcessOpponentList(response);
                         }
                         break;
-                    case 4: //consultar oponente
+                    case 4: //consultar partidas hechas con un cierto oponente
                         MessageBox.Show("Server response: " + response);
-                        // Procesar la respuesta para llenar el DataGridView
-                        ProcessGameResults(response);
+                        // "\n1/manel007/Hugo123/100/80/2024-10-10 14:00:00\n"
+                        this.Invoke(new Action(() => { ShowGamesWithOpponent(response); }));
+                        //ShowGamesWithOpponent(response);
                         //es pot veure q no fem servir la mateixa funcio q pels oponents xq la resposta ara te 7 columnes
                         break;
-                    case 5: //show games 
-                        // Process the response         
+                    case 5: //show games   
                         MessageBox.Show("Server response: " + response);
-                        ProcessGameResults(response);
-                        // Close the connection
-                        server.Close();
-                        // HE CREAT UN ALTRE DATAGRIDVIEW
+                        this.Invoke(new Action(() => { ProcessGameResults(response); }));
+                        //ProcessGameResults(response);
+                        //server.Close();
                         break;
                     case 6: //show ranking
                         // Process the response to fill the DataGridView
+                        //"\nHugo123/180\nUser1/160\nmanel007/150\nLaura456/130\n1/0\n"
                         MessageBox.Show("Server response: " + response);
-                        ProcessRankingResults(response);
+                        //ProcessRankingResults(response);
+                        this.Invoke(new Action(() => { ProcessRankingResults(response); }));
                         break;
                     case 7:
                         string[] opponent = trozos_respuesta[1].Split('/');
@@ -158,13 +165,20 @@ namespace Battleship
                         break;
                     case 8:
                         MessageBox.Show("Disconnected from server");
+                        set_username(string.Empty);
                         break;
-
-
                 }
-                if (codigo == 8)
-                    break;
+                //if (codigo == 8)
+                //    break;
             }
+        }
+        private void set_username(string username)
+        {
+            this.username_of_the_connection = username;
+        }
+        private string get_username()
+        {
+            return this.username_of_the_connection;
         }
         private void show_Panel(Panel panel)
         {
@@ -203,8 +217,8 @@ namespace Battleship
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string username = nombre_usuario_label.Text;
-
+            //string username = nombre_usuario_label.Text;
+            string username = get_username();
             // Verifica si el evento se dispara y si el usuario está conectado
             MessageBox.Show("Cerrando el formulario...");
 
@@ -225,8 +239,8 @@ namespace Battleship
 
         private void desconnect_server__button_Click(object sender, EventArgs e)
         {
-            string username = nombre_usuario_label.Text;
-
+            //string username = nombre_usuario_label.Text;
+            string username = get_username();
             // Verifica si el evento se dispara y si el usuario está conectado
             MessageBox.Show("Desconectando...");
 
@@ -245,6 +259,7 @@ namespace Battleship
             login_panel_username_textBox.Text = "";
             login_panel_password_textBox.Text = "";
             nombre_usuario_label.Text = "";
+            set_username(string.Empty);
             login_panel.Visible = false;
             signup_panel.Visible = false;
             user_panel.Visible = false;
@@ -256,7 +271,8 @@ namespace Battleship
         {
             //Get the username and password from the TextBoxes
             string username = login_panel_username_textBox.Text;
-            nombre_usuario_label.Text = username;
+            //set_username(username);
+            //nombre_usuario_label.Text = username;
             string password = login_panel_password_textBox.Text;
 
             // Prepare the login data using ASCII encoding
@@ -268,122 +284,112 @@ namespace Battleship
             server.Send(data);
             MessageBox.Show("Login data sent: " + loginData);
         }
+        // data = "\n1/manel007/Hugo123/100/80/2024-10-10 14:00:00\n"
+        //private void ShowGamesWithOpponent(string data)
+        //{   
+        //    //DataGridView Name: dataGridView
+        //    //Columns Name: Player 1; Player 2; Points Player 1; Ppoints Player 2; Date Time
+        //}
 
-
-        private DataGridView playersDataGridView;
-
-        //inicializamos el datagrid para mostrar las diferentes partidas qcon un mismo oponente
-        private void InitializeDataGridView()
+        private void ShowGamesWithOpponent(string data)
         {
-            // Agregar columnas al DataGridView
-            playersDataGridView.Columns.Add("IdPartida", "ID Partida");
-            playersDataGridView.Columns.Add("Jugador1", "Jugador 1");
-            playersDataGridView.Columns.Add("Jugador2", "Jugador 2");
-            playersDataGridView.Columns.Add("PuntosJugador1", "Puntos Jugador 1");
-            playersDataGridView.Columns.Add("PuntosJugador2", "Puntos Jugador 2");
-            playersDataGridView.Columns.Add("Inicio", "Inicio");
-            playersDataGridView.Columns.Add("Final", "Final");
-
-            playersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        }
-
-
-        //función que recibe el mensaje del servidor, lo procesa y lo muestra en el datagridview
-        private void ProcessGameResults(string response)
-        {
+            // Clear previous data
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
 
-            if (response == "No games found.\n" || response == "No games found between the players.\n")
-            {
-                MessageBox.Show(response.Trim(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            dataGridView.Columns.Add("GameID", "Game ID");
+            // Set up the columns
             dataGridView.Columns.Add("Player1", "Player 1");
             dataGridView.Columns.Add("Player2", "Player 2");
-            dataGridView.Columns.Add("Player1Points", "Player 1 Points");
-            dataGridView.Columns.Add("Player2Points", "Player 2 Points");
-            dataGridView.Columns.Add("StartTime", "Start Time");
-            dataGridView.Columns.Add("EndTime", "End Time");
+            dataGridView.Columns.Add("PointsPlayer1", "Points Player 1");
+            dataGridView.Columns.Add("PointsPlayer2", "Points Player 2");
+            dataGridView.Columns.Add("DateTime", "Date Time");
 
-            string[] lines = response.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // Split the data into rows based on newlines
+            var rows = data.Trim().Split('\n');
 
-            foreach (string line in lines)
+            // Parse each row and add to the DataGridView
+            foreach (var row in rows)
             {
-                string[] parts = line.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (parts.Length == 7)
+                var columns = row.Split('/'); // Split fields based on '/'
+                if (columns.Length == 6)
                 {
-                    string idPartida = parts[0].Trim();
-                    string jugador1 = parts[1].Trim();
-                    string jugador2 = parts[2].Trim();
-                    string puntosJugador1 = parts[3].Trim();
-                    string puntosJugador2 = parts[4].Trim();
-                    string inicio = parts[5].Trim();
-                    string final = parts[6].Trim();
-
-                    dataGridView.Rows.Add(idPartida, jugador1, jugador2, puntosJugador1, puntosJugador2, inicio, final);
+                    dataGridView.Rows.Add(columns[1], columns[2], columns[3], columns[4], columns[5]);
                 }
             }
         }
+
+
+        // response = ""\nHugo123/180\nUser1/160\nmanel007/150\nLaura456/130\n1/0\n""
+        //private void ProcessRankingResults(string response)
+        //{
+        //    // DataGridView Name: dataGridView
+        //    // Columns Name: Players; Total Points
+        //}
 
         private void ProcessRankingResults(string response)
         {
+            // Clear previous data
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
 
-            if (response == "No rankings available.\n")
-            {
-                MessageBox.Show(response.Trim(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            dataGridView.Columns.Add("Username", "Username");
+            // Set up the columns
+            dataGridView.Columns.Add("Player", "Players");
             dataGridView.Columns.Add("TotalPoints", "Total Points");
 
-            string[] lines = response.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // Split the data into rows based on newlines
+            var rows = response.Trim().Split('\n');
 
-            foreach (string line in lines)
+            // Parse each row and add to the DataGridView
+            foreach (var row in rows)
             {
-                string[] parts = line.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (parts.Length == 2)
+                var columns = row.Split('/'); // Split fields based on '/'
+                if (columns.Length == 2)
                 {
-                    string username = parts[0].Trim();
-                    string totalPoints = parts[1].Trim();
-
-                    dataGridView.Rows.Add(username, totalPoints);
+                    dataGridView.Rows.Add(columns[0], columns[1]);
                 }
             }
         }
 
-        //per la llista d'oponents fem una funcio nova xq nomes te una columna la resposta del servidor
+
+        // response = "\nEsther789/Hugo123/User2/"
+        //private void ProcessOpponentList(string response)
+        //{
+        //    // DataGridView Name: dataGridView
+        //    // Columns Name: Opponents;
+        //}
 
         private void ProcessOpponentList(string response)
         {
-            // Limpiar las filas y columnas del DataGridView antes de agregar nuevos datos
+            // Clear previous data
             dataGridView.Rows.Clear();
             dataGridView.Columns.Clear();
 
-            // Agregar una columna para mostrar los nombres de los oponentes
-            dataGridView.Columns.Add("Oponente", "Oponente");
+            // Set up a single column for opponents
+            dataGridView.Columns.Add("Opponent", "Opponents");
 
-            // Dividir la respuesta en líneas (cada línea es un nombre de oponente)
-            string[] opponents = response.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            // Split the data into opponents based on '/'
+            var opponents = response.Trim().Split('/');
 
-            // Agregar cada oponente al DataGridView como una fila
-            foreach (string opponent in opponents)
+            // Add each opponent to the DataGridView
+            foreach (var opponent in opponents)
             {
-                dataGridView.Rows.Add(opponent.Trim());
+                if (!string.IsNullOrWhiteSpace(opponent))  // Ensure the value is not empty
+                {
+                    dataGridView.Rows.Add(opponent);
+                }
             }
+        }
+
+
+        private void ProcessGameResults(string response)
+        {
         }
 
         private void query_Button_Click(object sender, EventArgs e)
         {
-            dataGridView.Rows.Clear(); //limpiamos el data grid donde se mostraran las partidas contra un oponente
-
+            //dataGridView.Rows.Clear(); //limpiamos el data grid donde se mostraran las partidas contra un oponente
+            //dataGridView.Columns.Clear();
+            //dataGridView.DataSource = null;
 
             if (players_list_radioButton.Checked)
             {
@@ -404,7 +410,11 @@ namespace Battleship
                 string username = nombre_usuario_label.Text;
                 string opponent = opponent_textBox.Text;
                 string mensaje = $"4/{username}/{opponent}";
+                // Send the message to the server
+                byte[] msg = Encoding.ASCII.GetBytes(mensaje);
                 MessageBox.Show("data sent:" + mensaje);
+                server.Send(msg); // Sending the message using server.Client.Send
+
                 // Enviar al servidor el mensaje
             }
 
@@ -452,13 +462,6 @@ namespace Battleship
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(data_to_send);
                 server.Send(msg);
             }
-        }
-
-        
-
-        private void user_panel_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void back_button_Click(object sender, EventArgs e)
