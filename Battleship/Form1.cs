@@ -105,7 +105,8 @@ namespace Battleship
                         break;
                     case 5: //show games   
                         MessageBox.Show("Server response: " + response);
-                        this.Invoke(new Action(() => { ProcessGameResults(response); }));
+                        //this.Invoke(new Action(() => { ProcessGameResults(response); }));
+                        this.Invoke(new Action(() => { ShowGamesWithOpponent(response); }));
                         //ProcessGameResults(response);
                         //server.Close();
                         break;
@@ -298,11 +299,13 @@ namespace Battleship
             dataGridView.Columns.Clear();
 
             // Set up the columns
+            dataGridView.Columns.Add("ID Game", "ID Game");
             dataGridView.Columns.Add("Player1", "Player 1");
             dataGridView.Columns.Add("Player2", "Player 2");
             dataGridView.Columns.Add("PointsPlayer1", "Points Player 1");
             dataGridView.Columns.Add("PointsPlayer2", "Points Player 2");
-            dataGridView.Columns.Add("DateTime", "Date Time");
+            dataGridView.Columns.Add("Start Time", "Start Time");
+            dataGridView.Columns.Add("End Time", "End Time");
 
             // Split the data into rows based on newlines
             var rows = data.Trim().Split('\n');
@@ -311,9 +314,9 @@ namespace Battleship
             foreach (var row in rows)
             {
                 var columns = row.Split('/'); // Split fields based on '/'
-                if (columns.Length == 6)
+                if (columns.Length == 7)
                 {
-                    dataGridView.Rows.Add(columns[1], columns[2], columns[3], columns[4], columns[5]);
+                    dataGridView.Rows.Add(columns[0],columns[1], columns[2], columns[3], columns[4], columns[5], columns[6]);
                 }
             }
         }
@@ -383,6 +386,7 @@ namespace Battleship
 
         private void ProcessGameResults(string response)
         {
+
         }
 
         private void query_Button_Click(object sender, EventArgs e)

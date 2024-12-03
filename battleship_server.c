@@ -182,7 +182,7 @@ void handle_login(connected_users_list *list, char entrada[200], char sortida[20
 	
 	// Initialize connection to the database
 	conn = mysql_init(NULL);
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		sprintf(sortida, "Error connecting to MySQL server: %s", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -220,7 +220,7 @@ void handle_login(connected_users_list *list, char entrada[200], char sortida[20
 	
 	mysql_close(conn);
 }
-void handle_signup(char entrada[200], char *respuesta) {
+void handle_signup(char entrada[200], char *sortida) {
 	char username[100];
 	char email[100];
 	char password[100];
@@ -238,8 +238,8 @@ void handle_signup(char entrada[200], char *respuesta) {
 	
 	// Connect to MySQL
 	conn = mysql_init(NULL);
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
-		sprintf(respuesta, "Error connecting to MySQL: %s", mysql_error(conn));
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+		sprintf(sortida, "Error connecting to MySQL: %s", mysql_error(conn));
 		mysql_close(conn);
 		return;
 	}
@@ -249,7 +249,7 @@ void handle_signup(char entrada[200], char *respuesta) {
 	if (mysql_query(conn, query) == 0) {
 		res = mysql_store_result(conn);
 		if (res && mysql_num_rows(res) > 0) {
-			strcpy(respuesta, "1*6/0"); // Username already exists
+			strcpy(sortida, "1*6/0"); // Username already exists
 			mysql_free_result(res);
 			mysql_close(conn);
 			return;
@@ -260,156 +260,60 @@ void handle_signup(char entrada[200], char *respuesta) {
 	// Insert the new user
 	sprintf(query, "INSERT INTO users (username, email, password) VALUES ('%s', '%s', '%s');", username, email, password);
 	if (mysql_query(conn, query) == 0) {
-		strcpy(respuesta, "1*6/1"); // Success
+		strcpy(sortida, "1*6/1"); // Success
 	}
 	
 	mysql_close(conn);
 }
 
-
 void opponent_query(char entrada[200], char sortida[200]) {
-	// mensaje esperado 4/username/opponent
+ //mensaje esperado 4/username/opponent
 	char *p = strtok(entrada, "/");
 	p = strtok(NULL, "/");
 	char username[100];
 	strcpy(username, p);
-	
+
 	p = strtok(NULL, "/");
 	char opponent[100];
 	strcpy(opponent, p);
-	
+
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
 	char query[512];
 	char buffer[4096];
 	buffer[0] = '\0';
-	
+
 	conn = mysql_init(NULL);
-	
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
+
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		printf("Error connecting to MySQL server: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
 	}
+
+	sprintf(query,"SELECT g.id_game, u1.username AS player1_username, u2.username AS player2_username, "
+			"g.points_player_1, g.points_player_2, g.start_time, g.end_time "
+			"FROM games g "
+			"JOIN users u1 ON g.id_player_1 = u1.ID "
+			"JOIN users u2 ON g.id_player_2 = u2.ID "
+			"WHERE (u1.username = '%s' AND u2.username = '%s') "
+			"OR (u1.username = '%s' AND u2.username = '%s');",username, opponent, opponent, username);
 	
-	// Primero, obtenemos los ids de los jugadores para buscar en la tabla 'games'
-	// Primero, obtenemos los ids de los jugadores para buscar en la tabla 'games'
-	sprintf(query,
-			"SELECT id_player_1, id_player_2 "
-			"FROM games "
-			"WHERE (id_player_1 = (SELECT ID FROM users WHERE username = '%s') "
-			"AND id_player_2 = (SELECT ID FROM users WHERE username = '%s')) "
-			"OR (id_player_1 = (SELECT ID FROM users WHERE username = '%s') "
-			"AND id_player_2 = (SELECT ID FROM users WHERE username = '%s'));",
-			username, opponent, opponent, username);
-	
-	if (mysql_query(conn, query) != 0) {
-		printf("Error querying database for games: %u %s\n", mysql_errno(conn), mysql_error(conn));
-		mysql_close(conn);
-		return;
-	}
-	
+	mysql_query(conn, query);
 	res = mysql_store_result(conn);
-	if (res == NULL) {
-		printf("Error retrieving results: %u %s\n", mysql_errno(conn), mysql_error(conn));
-		mysql_close(conn);
-		return;
-	}
-	
+	//ID_Game | Player 1 Username | Player 2 Username | Points 1 | Points 2 | Start Time | End Time
 	while ((row = mysql_fetch_row(res)) != NULL) {
-		int player1_id = atoi(row[0]);
-		int player2_id = atoi(row[1]);
-		
-		char player1_name[100];
-		sprintf(query, "SELECT username FROM users WHERE ID = %d;", player1_id);
-		if (mysql_query(conn, query) != 0) {
-			printf("Error querying username for player1: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_RES *res1 = mysql_store_result(conn);
-		if (res1 == NULL) {
-			printf("Error retrieving username for player1: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_ROW row1 = mysql_fetch_row(res1);
-		if (row1 != NULL) {
-			strcpy(player1_name, row1[0]);
-		}
-		mysql_free_result(res1);
-		
-		char player2_name[100];
-		sprintf(query, "SELECT username FROM users WHERE ID = %d;", player2_id);
-		if (mysql_query(conn, query) != 0) {
-			printf("Error querying username for player2: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_RES *res2 = mysql_store_result(conn);
-		if (res2 == NULL) {
-			printf("Error retrieving username for player2: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_ROW row2 = mysql_fetch_row(res2);
-		if (row2 != NULL) {
-			strcpy(player2_name, row2[0]);
-		}
-		mysql_free_result(res2);
-		
-		sprintf(query,
-				"SELECT g.id_game, g.points_player_1, g.points_player_2, g.start_time, g.end_time "
-				"FROM games g "
-				"WHERE g.id_player_1 = %d AND g.id_player_2 = %d "
-				"OR g.id_player_1 = %d AND g.id_player_2 = %d;",
-				player1_id, player2_id, player2_id, player1_id);
-		
-		if (mysql_query(conn, query) != 0) {
-			printf("Error querying game information: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_RES *res_game = mysql_store_result(conn);
-		if (res_game == NULL) {
-			printf("Error retrieving game results: %u %s\n", mysql_errno(conn), mysql_error(conn));
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
-		
-		MYSQL_ROW game_row = mysql_fetch_row(res_game);
-		if (game_row != NULL) {
-			char game_info[256];
-			sprintf(game_info, "%s/%s/%s/%s/%s/%s\n",
-					game_row[0], player1_name, player2_name, game_row[1], game_row[2], game_row[3], game_row[4]);
-			strcat(buffer, game_info);
-		}
-		mysql_free_result(res_game);
+		sprintf(sortida,"%s/%s/%s/%s/%s/%s/%s",
+			   row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
 	}
-	
-	if (strlen(buffer) == 0) {
-		strcpy(sortida, "No games found between the players.\n");
-	} else {
-		strcpy(sortida, buffer);
-	}
-	
+
 	mysql_free_result(res);
 	mysql_close(conn);
 }
 
-void list_of_games(char entrada[512], char respuesta[512]) {
+void list_of_games(char entrada[512], char sortida[512]){
+	
 	//mensaje esperado 3/username
 	char *p = strtok(entrada, "/");
 	p = strtok(NULL, "/");
@@ -420,62 +324,40 @@ void list_of_games(char entrada[512], char respuesta[512]) {
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
+	char user[200];
 	char query[512];
 	char buffer[4096];
 	buffer[0] = '\0';
 	
 	conn = mysql_init(NULL);
-	if (conn == NULL) {
-		strcpy(respuesta, "ERROR: Failed to initialize MySQL connection\n");
-		return;
-	}
 	
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
-		strcpy(respuesta, "ERROR: Failed to connect to database\n");
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+		strcpy(sortida, "ERROR: Failed to connect to database\n");
 		mysql_close(conn);
 		return;
 	}
-	
+
 	sprintf(query,
-			 "SELECT DISTINCT u.username AS oponente "
-			 "FROM games g "
-			 "JOIN users u ON (u.ID = g.id_player_1 OR u.ID = g.id_player_2) "
-			 "WHERE (g.id_player_1 = (SELECT ID FROM users WHERE username = '%s') "
-			 "OR g.id_player_2 = (SELECT ID FROM users WHERE username = '%s')) "
-			 "AND u.username != '%s';", username, username, username);
+			"SELECT DISTINCT "
+			"CASE "
+			"WHEN u1.username = '%s' THEN u2.username "
+			"ELSE u1.username "
+			"END AS opponent_username "
+			"FROM games g "
+			"JOIN users u1 ON g.id_player_1 = u1.ID "
+			"JOIN users u2 ON g.id_player_2 = u2.ID "
+			"WHERE u1.username = '%s' OR u2.username = '%s';",
+			username, username, username);
 	
-	if (mysql_query(conn, query)) {
-		strcpy(respuesta, "ERROR: Query execution failed\n");
-		mysql_close(conn);
-		return;
-	}
-	
+	mysql_query(conn, query);
 	res = mysql_store_result(conn);
-	if (res == NULL) {
-		strcpy(respuesta, "ERROR: Failed to retrieve result\n");
-		mysql_close(conn);
-		return;
-	}
 	
-	// Construir la lista de oponentes
 	while ((row = mysql_fetch_row(res)) != NULL) {
-		char opponent_info[256];
-		sprintf(opponent_info,"%s/", row[0]); // Molt important treure el barra n
-		if (strlen(buffer) + strlen(opponent_info) < sizeof(buffer)) {
-			strcat(buffer, opponent_info);
-		} else {
-			strcpy(respuesta, "ERROR: Buffer overflow detected\n");
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
+		//printf(row[0],'\n');
+		//strcpy(user,row[0]);
+		strcat(sortida, "/");
+		strcat(sortida,row[0]);
 	}
-	if (strlen(buffer) > 0) {
-		strcpy(respuesta, buffer);
-	} else {
-		strcpy(respuesta, "3/No se encontraron oponentes.\n"); // "No se encontraron oponentes
-	}
-	
 	mysql_free_result(res);
 	mysql_close(conn);
 }
@@ -495,17 +377,19 @@ void show_games(char entrada[512], char sortida[512]) {
 	p = strtok(NULL, "/");
 	char start_time[20];
 	strcpy(start_time, p);
+	//strcat(start_time," 14:00:00");
 	
 	p = strtok(NULL, "/");
 	char end_time[20];
 	strcpy(end_time, p);
+	//strcat(end_time," 15:00:00");
 	
 	char buffer[4096];
 	buffer[0] = '\0';
 	
 	conn = mysql_init(NULL);
 	
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		printf("Error connecting to MySQL server: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -522,12 +406,8 @@ void show_games(char entrada[512], char sortida[512]) {
 	}
 	
 	res = mysql_store_result(conn);
-	if ((row = mysql_fetch_row(res)) == NULL) {
-		printf("Username not found.\n");
-		mysql_free_result(res);
-		mysql_close(conn);
-		return;
-	}
+	row = mysql_fetch_row(res);
+
 	int id_user = atoi(row[0]);
 	mysql_free_result(res);
 	
@@ -568,7 +448,7 @@ void show_games(char entrada[512], char sortida[512]) {
 	mysql_close(conn);
 }
 
-void show_rankings(char entrada[512], char respuesta[512]) {
+void show_rankings(char entrada[512], char sortida[512]) {
 	MYSQL *conn;
 	MYSQL_RES *res;
 	MYSQL_ROW row;
@@ -576,57 +456,27 @@ void show_rankings(char entrada[512], char respuesta[512]) {
 	buffer[0] = '\0';   
 	
 	conn = mysql_init(NULL);
-	if (conn == NULL) {
-		strcpy(respuesta, "ERROR: Could not initialize MySQL connection.\n");
-		return;
-	}
 	
-	if (mysql_real_connect(conn, "localhost", "root", "mysql", "battleship_database", 0, NULL, 0) == NULL) {
-		sprintf(respuesta, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+		sprintf(sortida, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
 	}
 	
-	const char *query = "SELECT username, total_points FROM users ORDER BY total_points DESC;";
-	if (mysql_query(conn, query)) {
-		sprintf(respuesta, "ERROR: Query failed: %s\n", mysql_error(conn));
-		mysql_close(conn);
-		return;
-	}
-	
+	char query[1024] = "SELECT username, total_points FROM users ORDER BY total_points DESC;";
+	mysql_query(conn, query);
 	res = mysql_store_result(conn);
-	if (res == NULL) {
-		sprintf(respuesta, "ERROR: Could not retrieve results: %s\n", mysql_error(conn));
-		mysql_close(conn);
-		return;
-	}
-	
-	
 	while ((row = mysql_fetch_row(res)) != NULL) {
-		char line[256];
-		sprintf(line, "%s/%s\n", row[0], row[1]);
-		
-		if (strlen(buffer) + strlen(line) < sizeof(buffer)) {
-			strcat(buffer, line);
-		} else {
-			strcpy(respuesta, "ERROR: Buffer overflow, data too large.\n");
-			mysql_free_result(res);
-			mysql_close(conn);
-			return;
-		}
+		strcat(sortida,row[0]);
+		strcat(sortida,"/");
+		strcat(sortida, row[1]);
+		strcat(sortida,"\n");
 	}
-	
-	if (strlen(buffer) == 0) {
-		strcpy(respuesta, "No rankings available.\n");
-	} else {
-		strcpy(respuesta, buffer);
-	}
-	
 	mysql_free_result(res);
 	mysql_close(conn);
 }
 
-void handle_game_invitation(connected_users_list *list, char entrada[512], char respuesta[512]) {
+void handle_game_invitation(connected_users_list *list, char entrada[512], char sortida[512]) {
 	char username[100];
 	char opponent[100];
 	char response[100];
@@ -651,8 +501,6 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 		strcpy(data_to_send,"7*/");
 		strcat(data_to_send,"1/");
 		strcat(data_to_send,username);
-/*		socket_ooponent = give_me_socket(list,opponent);*/
-/*		write(socket_ooponent,data_to_send ,strlen(data_to_send));*/
 	}
 	if(strcmp(type_of_message,"2")==0){
 		p = strtok(NULL, "/");
@@ -666,8 +514,6 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 		strcat(data_to_send,response);
 		strcat(data_to_send,"/");
 		strcat(data_to_send,username);
-/*		socket_ooponent = give_me_socket(list,opponent);*/
-/*		write(socket_ooponent,data_to_send ,strlen(data_to_send));*/
 	}
 	socket_ooponent = give_me_socket(list,opponent);
 	write(socket_ooponent,data_to_send ,strlen(data_to_send));
@@ -678,9 +524,9 @@ void *AtenderCliente(void *socket){
 	int *s;
 	s = (int *) socket;
 	sock_conn = *s;
-	
 	char peticion[512];
-	char respuesta[512];
+/*	char peticion[512];*/
+	char sortida[512];
 	int ret;
 	int terminar = 0;
 	//char notification_connected_users[512];
@@ -690,6 +536,8 @@ void *AtenderCliente(void *socket){
 		printf("Recibido\n");
 		
 		peticion[ret] = '\0';
+		//char sortida[512];
+		strcpy(sortida,"");
 		char peticionInicial[512];
 		strcpy(peticionInicial, peticion);
 		
@@ -702,59 +550,60 @@ void *AtenderCliente(void *socket){
 		
 		if (codigo == 1){ //signup
 			pthread_mutex_lock( &mutex);
-			handle_signup(peticionInicial, respuesta);
-			printf("Respuesta: %s\n", respuesta);
-			write (sock_conn, respuesta, strlen(respuesta));
+			handle_signup(peticionInicial, sortida);
+			printf("sortida: %s\n", sortida);
+			write (sock_conn, sortida, strlen(sortida));
 			pthread_mutex_unlock( &mutex);
 			
 		}	
 	
 		else if (codigo == 2){  // Login
 			pthread_mutex_lock( &mutex);
-			handle_login(&my_connected_users_list, peticionInicial, respuesta, sock_conn); // Llamada a handle_login
+			handle_login(&my_connected_users_list, peticionInicial, sortida, sock_conn); // Llamada a handle_login
 			show_connected_users(&my_connected_users_list);
-			printf("Respuesta: %s\n", respuesta);
-			write (sock_conn, respuesta, strlen(respuesta));
+			printf("sortida: %s\n", sortida);
+			write (sock_conn, sortida, strlen(sortida));
 			pthread_mutex_unlock( &mutex);
 			show_connected_users(&my_connected_users_list);
 		}	
 		
 		else if (codigo == 3){ // Listar juegos
-			char agregar[10] = "3*\n";
-			list_of_games(peticionInicial, respuesta);
-			strcat(agregar,respuesta);
-			printf("Respuesta: %s\n", agregar);
+			//char agregar[10] = "3*\n";
+			char agregar[10] = "3*\n" ;
+			list_of_games(peticionInicial, sortida);
+			strcat(agregar,sortida);
+			printf("sortida: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
 		}
 		
 		else if (codigo == 4){  // Consulta de oponente
 			char agregar[10] = "4*\n";
-			opponent_query(peticionInicial, respuesta);
-			strcat(agregar,respuesta);
-			printf("Respuesta: %s\n", agregar);
+			opponent_query(peticionInicial, sortida);
+			strcat(agregar,sortida);
+			printf("sortida: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
 		}
 		
 		else if (codigo == 5){  // Mostrar juegos
 			char agregar[10] = "5*\n";
-			show_games(peticionInicial, respuesta);
-			strcat(agregar,respuesta);
-			printf("Respuesta: %s\n", agregar);
+			show_games(peticionInicial, sortida);
+			strcat(agregar,sortida);
+			printf("sortida: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
 		}
 		
 		else if(codigo == 6){  // Mostrar rankings
 			char agregar[2000] = "6*\n";
-			show_rankings(peticionInicial, respuesta);
-			strcat(agregar,respuesta);
-			printf("Respuesta: %s\n", agregar);
+			show_rankings(peticionInicial, sortida);
+			strcat(agregar,sortida);
+			printf("sortida: %s\n", agregar);
 			write (sock_conn, agregar, strlen(agregar));
 			//write (sock_conn, agregar, sizeof(agregar)-1);
 		}
 		else if (codigo == 7){
 			char agregar[10] = "7*\n";
 			pthread_mutex_lock( &mutex);
-			handle_game_invitation(&my_connected_users_list,peticionInicial,respuesta);
+			handle_game_invitation(&my_connected_users_list,peticionInicial,sortida);
 			pthread_mutex_unlock( &mutex);
 		}
 		else if (codigo == 8){  // Eliminar a un jugador de la lista de conectados
@@ -779,14 +628,6 @@ int main(int argc, char *argv[]){
 		int sock_conn, sock_listen;
 		struct sockaddr_in serv_adr;
 		
-		
-/*		add_user(&my_connected_users_list,"manel007",007);*/
-		//add_user(&my_connected_users_list,"esther789",789);
-/*		char respuesta[200];*/
-/*		char entrada[200]; */
-/*		strcpy(entrada,"2/manel007/esther789") ;*/
-/*		handle_game_invitation(&my_connected_users_list,entrada,respuesta);*/
-		
 		// Obrim el socket
 		if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 			printf("Error creant socket");
@@ -796,8 +637,6 @@ int main(int argc, char *argv[]){
 		memset(&serv_adr, 0, sizeof(serv_adr));// inicialitza a zero serv_addr
 		serv_adr.sin_family = AF_INET;
 		
-		// asocia el socket a cualquiera de las IP de la m?quina. 
-		//htonl formatea el numero que recibe al formato necesario
 		serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
 		// establecemos el puerto de escucha
 		serv_adr.sin_port = htons(8050);
@@ -816,9 +655,6 @@ int main(int argc, char *argv[]){
 			printf ("He recibido conexion\n");
 			
 			sockets[j] = sock_conn;
-			//sock_conn es el socket que usaremos para este cliente
-			
-			// Crear thead y decirle lo que tiene que hacer
 			
 			pthread_create (&thread, NULL, AtenderCliente,&sockets[j]);
 			j++;
