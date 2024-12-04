@@ -307,7 +307,6 @@
             this.user_panel.Name = "user_panel";
             this.user_panel.Size = new System.Drawing.Size(2548, 1327);
             this.user_panel.TabIndex = 4;
-            //this.user_panel.Paint += new System.Windows.Forms.PaintEventHandler(this.user_panel_Paint);
             // 
             // game_invitation_textBox
             // 
@@ -512,6 +511,7 @@
             this.new_game_User_panel_button.TabIndex = 31;
             this.new_game_User_panel_button.Text = "New Game";
             this.new_game_User_panel_button.UseVisualStyleBackColor = true;
+            this.new_game_User_panel_button.Click += new System.EventHandler(this.new_game_User_panel_button_Click);
             // 
             // resume_game_User_panel_button
             // 

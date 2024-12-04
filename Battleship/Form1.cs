@@ -10,6 +10,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using System.Xml.Schema;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -118,42 +119,7 @@ namespace Battleship
                         this.Invoke(new Action(() => { ProcessRankingResults(response); }));
                         break;
                     case 7:
-                        string[] opponent = trozos_respuesta[1].Split('/');
-                        if (opponent[1] == "1") // Invitacions
-                        { 
-                                DialogResult respuesta = MessageBox.Show("Do you accept ?",
-                                    $"User {opponent[2]} invites you to play a game.",
-                                        MessageBoxButtons.YesNo // Icono
-                                    );
-                                string username = nombre_usuario_label.Text;
-                                string serviceCode = "7";  //
-                                string type_of_message = "2"; // Respostes
-
-                                if (respuesta == DialogResult.Yes)
-                                {
-                                    string bool_respuesta = "1"; // Afirmatiu
-                                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
-                                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
-                                    server.Send(data);
-                            }
-                                else if (respuesta == DialogResult.No)
-                                {
-                                    string bool_respuesta = "0"; // negatiu
-                                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
-                                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
-                                    server.Send(data);
-                                }
-                        }
-                        else if (opponent[1] == "2") {
-                            if (opponent[2] == "1")
-                            {
-                                MessageBox.Show($"{opponent[3]} has accept your game invitation.");
-                                // Aquí s'hauria d'obrir la interficie de joc i començara jugar
-                            }
-                            else if (opponent[2] == "0") {
-                                MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
-                            }
-                            }
+                        handle_game_invitation(trozos_respuesta);                
                         break;
 
                     case 9: //notificacion usuarios conectados
@@ -192,6 +158,53 @@ namespace Battleship
         private void mostrar_user_panel(string response)
         {
             show_Panel(user_panel);
+        }
+
+        private void handle_game_invitation(string[] trozos_respuesta)
+        {
+            string[] opponent = trozos_respuesta[1].Split('/');
+            if (opponent[1] == "1") // Invitacions
+            {
+                DialogResult respuesta = MessageBox.Show("Do you accept ?",
+                    $"User {opponent[2]} invites you to play a game.",
+                        MessageBoxButtons.YesNo // Icono
+                    );
+                string username = nombre_usuario_label.Text;
+                string serviceCode = "7";  //
+                string type_of_message = "2"; // Respostes
+
+                if (respuesta == DialogResult.Yes)
+                {
+                    string bool_respuesta = "1"; // Afirmatiu
+                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
+                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                    server.Send(data);
+
+                    Form2 gameform = new Form2();
+                    gameform.Show();
+                }
+                else if (respuesta == DialogResult.No)
+                {
+                    string bool_respuesta = "0"; // negatiu
+                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
+                    byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                    server.Send(data);
+                }
+            }
+            else if (opponent[1] == "2")
+            {
+                if (opponent[2] == "1")
+                {
+                    MessageBox.Show($"{opponent[3]} has accept your game invitation.");
+
+                    Form2 gameform = new Form2();
+                    gameform.Show();
+                }
+                else if (opponent[2] == "0")
+                {
+                    MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
+                }
+            }
         }
 
         private void login_panel_signup_button_Click(object sender, EventArgs e)
@@ -255,6 +268,14 @@ namespace Battleship
             }
 
             //aqui no cerramos la conexion con el servidor, pues queremos aprovechar que ya esta la conexion hecha y solo cambiar de user
+            if (Application.OpenForms["Form2"] != null)
+            {
+                // Obtener una referencia a Form2
+                Form formulario2 = Application.OpenForms["Form2"];
+
+                // Cerrar Form2
+                formulario2.Close();
+            }
 
             // Restablecer la interfaz a su estado inicial
             login_panel_username_textBox.Text = "";
@@ -509,6 +530,13 @@ namespace Battleship
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void new_game_User_panel_button_Click(object sender, EventArgs e)
+        {
+            Form2 gameform = new Form2();
+
+            gameform.Show();
         }
     }
 }
