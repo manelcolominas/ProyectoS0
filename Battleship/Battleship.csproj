@@ -92,5 +92,8 @@
   <ItemGroup>
     <None Include="bin\Debug\fondo inici.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sea_wallpaper.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

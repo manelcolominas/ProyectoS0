@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\SO\\projecte\\versio #3\\Battleship\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAMwCsAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAjwCoAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.036Z",
               "IsPinned": true,
@@ -52,7 +52,8 @@
               "RelativeToolTip": "Form1.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.701Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Bookmark",
@@ -72,7 +73,8 @@
               "RelativeToolTip": "Form1.Designer.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T14:18:39.708Z"
+              "WhenOpened": "2024-11-17T14:18:39.708Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -84,7 +86,8 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAnwBIAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-17T14:18:39.711Z"
+              "WhenOpened": "2024-11-17T14:18:39.711Z",
+              "EditorCaption": ""
             }
           ]
         }
