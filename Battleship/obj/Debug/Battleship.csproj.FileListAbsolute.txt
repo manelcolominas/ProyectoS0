@@ -96,3 +96,14 @@ C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes 
 C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Proves\ProyectoS0\Battleship\obj\Debug\Battleship.exe
 C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\Proves\ProyectoS0\Battleship\obj\Debug\Battleship.pdb
 C:\Users\pruiz\Desktop\Jo\Educació\Universitat\4t any\1r Quadrimestre\Sistemes Operatius\ProyectoS0\ProyectoS0\Battleship\obj\Debug\Battleship.Form2.resources
+C:\SO\repositorio git\Battleship\bin\Debug\Battleship.exe.config
+C:\SO\repositorio git\Battleship\bin\Debug\Battleship.exe
+C:\SO\repositorio git\Battleship\bin\Debug\Battleship.pdb
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.csproj.AssemblyReference.cache
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.Form1.resources
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.Form2.resources
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.Properties.Resources.resources
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.csproj.GenerateResource.cache
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.csproj.CoreCompileInputs.cache
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.exe
+C:\SO\repositorio git\Battleship\obj\Debug\Battleship.pdb

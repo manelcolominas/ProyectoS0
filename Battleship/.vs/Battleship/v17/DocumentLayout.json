@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\SO\\repositorio git\\Battleship\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\repositorio git\\battleship\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\repositorio git\\battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\repositorio git\\battleship\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\repositorio git\\Battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\repositorio git\\battleship\\form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|c:\\so\\repositorio git\\battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\repositorio git\\Battleship\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D02367FD-B25C-4537-B220-82F81A5403B6}|Battleship.csproj|C:\\SO\\repositorio git\\Battleship\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,17 +34,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\SO\\repositorio git\\Battleship\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\SO\\repositorio git\\Battleship\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAjwCoAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAOwBAAAAAAAAAAAYwPcBAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-11-17T14:18:39.036Z",
               "IsPinned": true,
@@ -52,7 +52,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Form1.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\SO\\repositorio git\\Battleship\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
@@ -64,6 +64,14 @@
               "EditorCaption": " [Dise\u00F1o]"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Form2.cs",
@@ -71,14 +79,14 @@
               "RelativeDocumentMoniker": "Form2.cs",
               "ToolTip": "C:\\SO\\repositorio git\\Battleship\\Form2.cs",
               "RelativeToolTip": "Form2.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwDEAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T14:53:44.308Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Form2.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\SO\\repositorio git\\Battleship\\Form2.cs",
               "RelativeDocumentMoniker": "Form2.cs",
@@ -87,14 +95,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-05T14:51:09.162Z",
               "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Document",

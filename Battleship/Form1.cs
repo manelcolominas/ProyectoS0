@@ -501,8 +501,8 @@ namespace Battleship
 
         private void connect_server_button_Click(object sender, EventArgs e)
         {
-            IPAddress direc = IPAddress.Parse("192.168.56.102");
-            IPEndPoint ipep = new IPEndPoint(direc, 8050);
+            IPAddress direc = IPAddress.Parse("10.4.119.5");
+            IPEndPoint ipep = new IPEndPoint(direc, 50035);
 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
