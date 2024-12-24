@@ -119,7 +119,7 @@ namespace Battleship
                         this.Invoke(new Action(() => { ProcessRankingResults(response); }));
                         break;
                     case 7:
-                        handle_game_invitation(trozos_respuesta);                
+                        this.Invoke(new Action(() => {handle_game_invitation(trozos_respuesta); }));                
                         break;
 
                     case 9: //notificacion usuarios conectados
@@ -162,6 +162,7 @@ namespace Battleship
 
         private void handle_game_invitation(string[] trozos_respuesta)
         {
+            string username = get_username();
             string[] opponent = trozos_respuesta[1].Split('/');
             if (opponent[1] == "1") // Invitacions
             {
@@ -169,7 +170,6 @@ namespace Battleship
                     $"User {opponent[2]} invites you to play a game.",
                         MessageBoxButtons.YesNo // Icono
                     );
-                string username = nombre_usuario_label.Text;
                 string serviceCode = "7";  //
                 string type_of_message = "2"; // Respostes
 
@@ -180,7 +180,7 @@ namespace Battleship
                     byte[] data = Encoding.ASCII.GetBytes(data_to_send);
                     server.Send(data);
 
-                    Form2 gameform = new Form2();
+                    Form2 gameform = new Form2(username);
                     gameform.Show();
                 }
                 else if (respuesta == DialogResult.No)
@@ -197,12 +197,16 @@ namespace Battleship
                 {
                     MessageBox.Show($"{opponent[3]} has accept your game invitation.");
 
-                    Form2 gameform = new Form2();
+                    Form2 gameform = new Form2(username);
                     gameform.Show();
                 }
                 else if (opponent[2] == "0")
                 {
                     MessageBox.Show($"{opponent[3]} has not accept your game invitation.");
+                }
+                else if (opponent[2] == "2")
+                {
+                    MessageBox.Show($"{opponent[3]} is not connected.");
                 }
             }
         }
@@ -501,8 +505,10 @@ namespace Battleship
 
         private void connect_server_button_Click(object sender, EventArgs e)
         {
-            IPAddress direc = IPAddress.Parse("10.4.119.5");
-            IPEndPoint ipep = new IPEndPoint(direc, 50035);
+            IPAddress direc = IPAddress.Parse("192.168.56.102");
+            IPEndPoint ipep = new IPEndPoint(direc, 8050);
+            //IPAddress direc = IPAddress.Parse("10.4.119.5");
+            //IPEndPoint ipep = new IPEndPoint(direc, 50035);
 
             server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -534,7 +540,8 @@ namespace Battleship
 
         private void new_game_User_panel_button_Click(object sender, EventArgs e)
         {
-            Form2 gameform = new Form2();
+            string username = get_username();
+            Form2 gameform = new Form2(username);
 
             gameform.Show();
         }

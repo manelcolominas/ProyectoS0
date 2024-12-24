@@ -14,14 +14,15 @@ namespace Battleship
     {
         private List<(int Row, int Column)> userselectedCells = new List<(int, int)>();
         private List<(int Row, int Column)> opponentselectedCells = new List<(int, int)>();
+        private string username;
 
-        public Form2()
+        public Form2(string username)
         {
-            InitializeComponent(); 
-            form2_shoot_button.Visible= false;
+            InitializeComponent();
+            form2_shoot_button.Visible = false;
             form2_send_fleet_position_button.Visible = true;
             opponent_dataGridView.CellClick -= opponent_dataGridView_CellClick;
-
+            this.username = username;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,22 +37,28 @@ namespace Battleship
         }
         private void form2_send_fleet_position_button_Click(object sender, EventArgs e)
         {
-            form2_send_fleet_position_button.Visible= false;
-
-            form2_shoot_button.Visible = true;
             user_dataGridView.CellClick -= user_dataGridView_CellClick;
             opponent_dataGridView.CellClick += opponent_dataGridView_CellClick;
-
-            // Genera un mensaje con las coordenadas seleccionadas
-            string message = "Celdas seleccionadas:\n";
-            foreach (var (Row, Column) in userselectedCells)
+            if (userselectedCells.Count == 5)
             {
-                message += $"Fila: {Row}, Columna: {Column}\n";
-            }
+                form2_send_fleet_position_button.Visible = false;
 
-            // Muestra las coordenadas en un MessageBox
-            MessageBox.Show(message, "Celdas Seleccionadas");
-    }
+                form2_shoot_button.Visible = true;
+                // Genera un mensaje con las coordenadas seleccionadas
+                string message = $"10/{username}/";
+                foreach (var (Row, Column) in userselectedCells)
+                {
+                    message += $"{Row:D2}/{Column:D2}/";
+                }
+                // Muestra las coordenadas en un MessageBox
+                MessageBox.Show(message, "Celdas Seleccionadas");
+            }
+            else
+            {
+                MessageBox.Show($"Faltan por seleccionar {5 - userselectedCells.Count} celdas.");
+
+            }
+        }
 
         private void opponent_dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -68,9 +75,9 @@ namespace Battleship
                 }
                 else
                 {
-                    if (opponentselectedCells.Count >= 1 && !opponentselectedCells.Contains(cellPosition))
+                    if (opponentselectedCells.Count > 2 && !opponentselectedCells.Contains(cellPosition))
                     {
-                        MessageBox.Show("Solo puedes seleccionar hasta 1 celda.", "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Solo puedes seleccionar hasta 3 celda.", "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
@@ -128,9 +135,9 @@ namespace Battleship
                 }
                 else
                 {
-                    if (userselectedCells.Count >= 10 && !userselectedCells.Contains(cellPosition))
+                    if (userselectedCells.Count > 5-1 && !userselectedCells.Contains(cellPosition))
                     {
-                        MessageBox.Show("Solo puedes seleccionar hasta 10 celdas.", "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("No puedes seleccionar más celdas.", "Límite alcanzado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                     else
                     {
@@ -138,7 +145,6 @@ namespace Battleship
                         userselectedCells.Add(cellPosition);
                     }
                 }
-                dgv.InvalidateCell(cell);
                 dgv.InvalidateCell(cell);
             }
         }

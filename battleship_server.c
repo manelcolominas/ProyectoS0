@@ -182,7 +182,7 @@ void handle_login(connected_users_list *list, char entrada[200], char sortida[20
 	
 	// Initialize connection to the database
 	conn = mysql_init(NULL);
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		sprintf(sortida, "Error connecting to MySQL server: %s", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -238,7 +238,7 @@ void handle_signup(char entrada[200], char *sortida) {
 	
 	// Connect to MySQL
 	conn = mysql_init(NULL);
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		sprintf(sortida, "Error connecting to MySQL: %s", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -286,7 +286,7 @@ void opponent_query(char entrada[200], char sortida[200]) {
 
 	conn = mysql_init(NULL);
 
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		printf("Error connecting to MySQL server: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -331,7 +331,7 @@ void list_of_games(char entrada[512], char sortida[512]){
 	
 	conn = mysql_init(NULL);
 	
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		strcpy(sortida, "ERROR: Failed to connect to database\n");
 		mysql_close(conn);
 		return;
@@ -389,7 +389,7 @@ void show_games(char entrada[512], char sortida[512]) {
 	
 	conn = mysql_init(NULL);
 	
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		printf("Error connecting to MySQL server: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -457,7 +457,7 @@ void show_rankings(char entrada[512], char sortida[512]) {
 	
 	conn = mysql_init(NULL);
 	
-	if (mysql_real_connect(conn, "shiva2.upc.es", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
 		sprintf(sortida, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return;
@@ -490,7 +490,6 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 	char *p = strtok(entrada, "/");
 	p = strtok(NULL, "/");
 	strcpy(type_of_message, p);
-	
 	int socket_ooponent;
 	if(strcmp(type_of_message,"1")==0){
 		p = strtok(NULL, "/");
@@ -498,9 +497,18 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 		p = strtok(NULL, "/");
 		strcpy(opponent, p);
 		
-		strcpy(data_to_send,"7*/");
-		strcat(data_to_send,"1/");
-		strcat(data_to_send,username);
+		socket_ooponent = give_me_socket(list,opponent);
+		
+		if (socket_ooponent == -1 ){
+			socket_ooponent = give_me_socket(list,username);
+			strcpy(data_to_send,"7*/2/2/");
+			strcat(data_to_send,opponent);
+		}
+		else {
+			strcpy(data_to_send,"7*/");
+			strcat(data_to_send,"1/");
+			strcat(data_to_send,username);
+		}
 	}
 	if(strcmp(type_of_message,"2")==0){
 		p = strtok(NULL, "/");
@@ -514,8 +522,27 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 		strcat(data_to_send,response);
 		strcat(data_to_send,"/");
 		strcat(data_to_send,username);
+		socket_ooponent = give_me_socket(list,opponent);
+/*		if(strcmp(response,"1") == 0){*/
+/*			MYSQL *conn;*/
+/*			MYSQL_RES *res;*/
+/*			MYSQL_ROW row;			*/
+/*			conn = mysql_init(NULL);*/
+			
+/*			if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {*/
+/*				sprintf(sortida, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));*/
+/*				mysql_close(conn);*/
+/*				return;*/
+/*			}*/
+/*			char query[1024] = "SELECT MAX(g.id_game) FROM games;";*/
+/*			mysql_query(conn, query);*/
+/*			res = mysql_store_result(conn);*/
+/*			row = mysql_fetch_row(res);*/
+/*			strcat(data_to_send,"/");*/
+/*			int id_game = atoi(row[0])+1;*/
+/*			strcat(data_to_send,row[0]);*/
+/*		}*/
 	}
-	socket_ooponent = give_me_socket(list,opponent);
 	write(socket_ooponent,data_to_send ,strlen(data_to_send));
 }
 
@@ -617,7 +644,7 @@ void *AtenderCliente(void *socket){
 		}
 		
 		else{
-			printf("El código %d es desconocido"); 
+			printf("El código %d es desconocido",codigo); 
 		}
 	}
 	//servicio finalizado para este cliente
@@ -626,7 +653,6 @@ void *AtenderCliente(void *socket){
 	
 int main(int argc, char *argv[]){
 		int sock_conn, sock_listen;
-		int puerto = 50035;
 		struct sockaddr_in serv_adr;
 		
 		// Obrim el socket
@@ -640,7 +666,7 @@ int main(int argc, char *argv[]){
 		
 		serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
 		// establecemos el puerto de escucha
-		serv_adr.sin_port = htons(puerto);
+		serv_adr.sin_port = htons(8050);
 		if (bind(sock_listen, (struct sockaddr *) &serv_adr, sizeof(serv_adr)) < 0)
 			printf ("Error al bind\n");
 		
