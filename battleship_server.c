@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include<unistd.h>
 #define MAX_USERS 100
+#define MAX_GAMES 100
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 //base de datos
@@ -20,6 +21,7 @@ MYSQL_RES *resultado;
 MYSQL_ROW row;
 //variables globales
 int num_connected;
+int num_online_games;
 int sockets[100];
 
 
@@ -32,6 +34,25 @@ typedef struct {
 	Connected connected_users [MAX_USERS];
 	int num;
 } connected_users_list;
+
+typedef struct {
+	char username_player_1 [256];
+	char username_player_2 [256];
+	int id_player_1;
+	int id_player_2;
+	int points_player_1;
+	int points_player_2;
+	int fleet_position_player_1[10][10];
+	int fleet_position_player_2[10][10];
+	int ID_game;
+} Game;
+
+typedef struct {
+	Game online_games [MAX_GAMES];
+	int num;
+} online_games_list;
+
+online_games_list my_online_games_list;
 
 connected_users_list my_connected_users_list;
 
@@ -55,7 +76,6 @@ void show_connected_users(connected_users_list *list){
 		write(sockets[j],notificacion_conectados ,strlen(notificacion_conectados));
 		//printf("connected users: %s\n",notificacion_conectados);
 	}
-	
 }
 	
 int add_user(connected_users_list *list, char username[200], int socket) {
@@ -82,7 +102,6 @@ int give_me_position(connected_users_list *list, char username[256]){
 		i = i+1;
 	}
 	if (!found) return -1;
-	
 }
 
 int delete_user(connected_users_list *list, char entrada[256]){
@@ -475,15 +494,120 @@ void show_rankings(char entrada[512], char sortida[512]) {
 	mysql_free_result(res);
 	mysql_close(conn);
 }
+void create_game(char entrada[512], char sortida[512], online_games_list *online_games) {
+	char start_time[100];	
+	char query1[512];
+	char response[10];
+	char username[512];
+	char opponent[512];
+	char type_of_message[10];
+	char query2[512];
+	char query3[512];
+	
+	MYSQL *conn;
+	MYSQL_RES *res;
+	MYSQL_ROW row;
+	char *p = strtok(entrada, "/");
+	p = strtok(NULL, "/");
+	strcpy(type_of_message, p);
+	
+	p = strtok(NULL, "/");
+	strcpy(response, p);
+	p = strtok(NULL, "/");
+	strcpy(username, p);
+	p = strtok(NULL, "/");
+	strcpy(opponent, p);
+	p = strtok(NULL, "/");
+	strcpy(start_time,p);
+	
+	conn = mysql_init(NULL);
+	
+	if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {
+		sprintf(sortida, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));
+		mysql_close(conn);
+		return;
+	}
+	
+	sprintf(query1, "SELECT ID FROM users WHERE username = '%s';", username);
+	mysql_query(conn, query1);
+	res = mysql_store_result(conn);
+	row = mysql_fetch_row(res);
+	int id_player_1 = atoi(row[0]);
+	
+	sprintf(query2, "SELECT ID FROM users WHERE username = '%s';", opponent);
+	mysql_query(conn, query2);
+	res = mysql_store_result(conn);
+	row = mysql_fetch_row(res);
+	int id_player_2 = atoi(row[0]);
+	
+	sprintf(query3,"INSERT INTO games (id_player_1, id_player_2, start_time) VALUES (%d, %d, '%s')",id_player_1, id_player_2, start_time);
+	mysql_query(conn, query3);
+	
+	
+	mysql_query(conn, "SELECT LAST_INSERT_ID()");
+	res = mysql_store_result(conn);
+	row = mysql_fetch_row(res);
+	int ID_game = atoi(row[0]);
+	strcpy(sortida,"10*/");
+	
+	char temp[50];
+	sprintf(temp, "%d", ID_game); 
+	strcat(sortida,temp);
+	
+	mysql_close(conn);
+	
+	//pthread_mutex_lock(&mutex);
+	add_game(online_games, username, opponent,id_player_1,id_player_2,ID_game);
+	//pthread_mutex_unlock(&mutex);
+	
+	//8*/ID_game/type_of_user/username/opponent 
+	//type_of_user 1 tu ets el username
+	//type_of_user 2 tu ets l opponent	
+}
 
-void handle_game_invitation(connected_users_list *list, char entrada[512], char sortida[512]) {
+
+
+void initialize_game(Game *game, char username_player_1[256],  char username_player_2[256],int id_player_1, int id_player_2, int id_game){
+	strcpy(game->username_player_1, username_player_1);
+	strcpy(game->username_player_2, username_player_2);
+	game->points_player_1 = 0;
+	game->points_player_2 = 0;
+	
+	// Initialize fleet positions to 0
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			game->fleet_position_player_1[i][j] = 0;
+			game->fleet_position_player_2[i][j] = 0;
+		}
+	}
+	
+	game->ID_game = id_game;
+	game->id_player_1 = id_player_1;
+	game->id_player_2 = id_player_2;
+}
+
+
+
+int add_game(online_games_list *list, char username_player_1[256], char username_player_2[256], int id_player_1, int id_player_2, int id_game) {
+	if (list->num >= MAX_GAMES) {
+		return -1;
+	}
+	initialize_game(&list->online_games[list->num], username_player_1, username_player_2, id_player_1, id_player_2, id_game);
+	list->num++;
+	return 0;
+}
+
+void handle_game_invitation(connected_users_list *list, online_games_list *online_games, char entrada[512], char sortida[512]) {
 	char username[100];
 	char opponent[100];
 	char response[100];
 	char data_to_send[100];
 	char type_of_message[100];
+	char create_game_message[100];
+	char data_to_send_username[256];
+	strcpy(create_game_message,entrada);
 	
-	//string data_to_send = $"{serviceCode}/{type_of_message}/{username}/{opponent}";
+	// string data_to_send = $"{serviceCode}/{type_of_message}/{username}/{opponent}";
 	// type_of_message = 1 invitations
 	// type_of_message = 2 respostes
 	
@@ -523,28 +647,198 @@ void handle_game_invitation(connected_users_list *list, char entrada[512], char 
 		strcat(data_to_send,"/");
 		strcat(data_to_send,username);
 		socket_ooponent = give_me_socket(list,opponent);
-/*		if(strcmp(response,"1") == 0){*/
-/*			MYSQL *conn;*/
-/*			MYSQL_RES *res;*/
-/*			MYSQL_ROW row;			*/
-/*			conn = mysql_init(NULL);*/
+		if(strcmp(response,"1") == 0){
+			create_game(create_game_message,data_to_send,online_games);
+			int socket_username =  give_me_socket(list,username);
+			strcpy(data_to_send_username,data_to_send);
+			//8*/ID_game/type_of_user/username/opponent 
+			//type_of_user 1 tu ets el username
+			//type_of_user 2 tu ets l opponent
+			strcat(data_to_send_username,"/");
+			strcat(data_to_send_username,username);
+			strcat(data_to_send_username,"/");
+			strcat(data_to_send_username,opponent);
+			write(socket_username,data_to_send_username ,strlen(data_to_send_username));
 			
-/*			if (mysql_real_connect(conn, "localhost", "root", "mysql", "M8_battleship_database", 0, NULL, 0) == NULL) {*/
-/*				sprintf(sortida, "ERROR: Could not connect to MySQL: %s\n", mysql_error(conn));*/
-/*				mysql_close(conn);*/
-/*				return;*/
-/*			}*/
-/*			char query[1024] = "SELECT MAX(g.id_game) FROM games;";*/
-/*			mysql_query(conn, query);*/
-/*			res = mysql_store_result(conn);*/
-/*			row = mysql_fetch_row(res);*/
-/*			strcat(data_to_send,"/");*/
-/*			int id_game = atoi(row[0])+1;*/
-/*			strcat(data_to_send,row[0]);*/
-/*		}*/
+			strcat(data_to_send,"/");
+			strcat(data_to_send,opponent);
+			strcat(data_to_send,"/");
+			strcat(data_to_send,username);
+		}
 	}
 	write(socket_ooponent,data_to_send ,strlen(data_to_send));
 }
+
+void parse_fleet_position(char message[512], int fleet_position[10][10]) {
+	char temp_message[256];
+	strcpy(temp_message, message);
+	char *token = strtok(temp_message, "*");
+	
+	while (token != NULL) {
+		int row, col;
+		if (sscanf(token, "%d:%d", &row, &col) == 2) {
+			if (row >= 0 && row < 10 && col >= 0 && col < 10) {
+				fleet_position[row][col] = 1;
+			} 
+		}
+		token = strtok(NULL, "*");
+	}
+}
+
+void update_fleet_position(Game *game, char username_player[256], char message[512]) {
+	if (strcmp(username_player, game->username_player_1)==0) {
+		parse_fleet_position(message, game->fleet_position_player_1);
+	} else if (strcmp(username_player, game->username_player_2)==0) {
+		parse_fleet_position(message, game->fleet_position_player_2);
+	}
+}
+
+Game* find_game_by_id(online_games_list *list, int ID_game) {
+	for (int i = 0; i < list->num; i++) {
+		if (list->online_games[i].ID_game == ID_game) {
+			return &list->online_games[i]; // Return a pointer to the game
+		}
+	}
+	return NULL; // Return NULL if no game is found
+}
+
+int has_fleet_placed(int fleet_position[10][10]) {
+	int count = 0;
+	int bool_fleet = 0;
+	for (int row = 0; row < 10; row++) {
+		for (int col = 0; col < 10; col++) {
+			if (fleet_position[row][col] == 1) {
+				count++;
+			}
+		}
+	}
+	
+	if (count == 5){
+		bool_fleet = 1;
+	}
+	return bool_fleet;
+}
+
+void shoot(Game *game, char username[128], char message[128]) {
+	char temp_message[256];
+	char output_buffer[256];
+	strcpy(temp_message, message);
+	char *token = strtok(temp_message, "*");
+	int socket_user ;
+	int socket_opponent;
+	
+	// Determine the target fleet based on the username
+	int (*target_fleet)[10] = NULL;
+	if (strcmp(username, game->username_player_1) == 0) {
+		target_fleet = game->fleet_position_player_2;
+		socket_user =  give_me_socket(&my_connected_users_list, game->username_player_1);
+		socket_opponent = give_me_socket(&my_connected_users_list, game->username_player_2);
+	} else if (strcmp(username, game->username_player_2) == 0) {
+		target_fleet = game->fleet_position_player_1;
+		socket_user =  give_me_socket(&my_connected_users_list, game->username_player_2);
+		socket_opponent = give_me_socket(&my_connected_users_list, game->username_player_1);
+	}
+	// Initialize the output buffer
+	char temp[16];
+	
+	// Parse the message and update the fleet
+	while (token != NULL) {
+		int row, col;
+		if (sscanf(token, "%d:%d", &row, &col) == 2) {
+			if (row >= 0 && row < 10 && col >= 0 && col < 10) {
+				if (target_fleet[row][col] == 1) {
+					target_fleet[row][col] = 0; // Mark as hit
+					// Add the hit cell to the output buffer
+					sprintf(temp, "%d:%d-", row, col);
+					strcat(output_buffer, temp);
+				}
+			}
+		}
+		token = strtok(NULL, "*");
+	}
+	
+	int len = strlen(output_buffer);
+	if (len > 0 && output_buffer[len - 1] == '*') {
+		output_buffer[len - 1] = '\0';
+	}
+	
+	char data_to_send_user[256];
+	char data_to_send_opponent[256];
+	
+	// {service_code}/*/{type_of_message}/{hitted_positions}
+	// type_of_message = 1 // respostes
+	// type_of_message = 2 // updates
+	char ID_game[128];
+	sprintf(ID_game,"%d/",game->ID_game);
+	
+	strcpy(data_to_send_user,"14*/1/");
+	strcat(data_to_send_user,ID_game);
+	strcat(data_to_send_user,output_buffer);
+	
+	strcpy(data_to_send_opponent,"14*/2/");
+	strcat(data_to_send_opponent,ID_game);
+	strcat(data_to_send_opponent,output_buffer);
+	
+	write (socket_user, data_to_send_user, strlen(data_to_send_user));
+	write (socket_opponent, data_to_send_opponent, strlen(data_to_send_opponent));
+}
+
+//02:01*03:02*04:03*05:04*06:05
+
+
+void handle_game(online_games_list *online_games, char entrada[512]) {
+	// entrada = "{ID_game}/{type_of_message}/{username}/{message}";
+	char type_of_message[10];
+	char username[256];
+	char message[256];
+	char num_shoots[128];
+	int bool_fleet_position;
+	
+	// type_of_message = "0" update_fleet_position
+	// type_of_message = "1" shoot's
+	// type_of_message = "2" end Game
+	
+	char *p = strtok(entrada, "/");
+	p = strtok(NULL, "/");
+	int ID_game = atoi(p);
+	p = strtok(NULL, "/");
+	strcpy(type_of_message,p);
+	p = strtok(NULL, "/");
+	strcpy(username,p);
+	
+	Game *game = find_game_by_id(online_games,ID_game);
+	
+	if (strcmp(type_of_message, "0")==0) {
+		p = strtok(NULL, "/");
+		strcpy(message,p);
+		update_fleet_position(game, username, message);
+	}
+	else if (strcmp(type_of_message, "1")==0) {
+		p = strtok(NULL, "/");
+		strcpy(num_shoots,p);
+		p = strtok(NULL, "/");
+		strcpy(message,p);
+		if (strcmp(num_shoots,"0") == 0) {
+			if (strcmp(username,game->username_player_1) ==0){
+				bool_fleet_position = has_fleet_placed(game->fleet_position_player_2);
+			}
+			else if (strcmp(username,game->username_player_2) ==0){
+				bool_fleet_position = has_fleet_placed(game->fleet_position_player_1);
+			}
+			if (bool_fleet_position == 1) {
+				shoot(game,username,message);
+			}
+		}
+		else {
+			shoot(game,username,message);
+		}
+	}
+	else if (strcmp(type_of_message, "2")==0) {
+		
+	}
+}
+	
+
 
 void *AtenderCliente(void *socket){
 	int sock_conn;
@@ -556,6 +850,7 @@ void *AtenderCliente(void *socket){
 	char sortida[512];
 	int ret;
 	int terminar = 0;
+	//my_online_games_list.num = 0;
 	//char notification_connected_users[512];
 	
 	while (terminar == 0) {
@@ -630,7 +925,7 @@ void *AtenderCliente(void *socket){
 		else if (codigo == 7){
 			char agregar[10] = "7*\n";
 			pthread_mutex_lock( &mutex);
-			handle_game_invitation(&my_connected_users_list,peticionInicial,sortida);
+			handle_game_invitation(&my_connected_users_list,&my_online_games_list,peticionInicial,sortida);
 			pthread_mutex_unlock( &mutex);
 		}
 		else if (codigo == 8){  // Eliminar a un jugador de la lista de conectados
@@ -641,6 +936,12 @@ void *AtenderCliente(void *socket){
 			pthread_mutex_unlock( &mutex);
 /*			char agregar[10] = "8*\n";*/
 /*			write (sock_conn, agregar, strlen(agregar));*/
+		}
+		else if (codigo == 13){
+			pthread_mutex_lock(&mutex);
+			//add_game(&my_online_games_list,"manel007","esther789",1,4,18);
+			handle_game(&my_online_games_list,peticionInicial);
+			pthread_mutex_unlock(&mutex);
 		}
 		
 		else{
@@ -654,6 +955,7 @@ void *AtenderCliente(void *socket){
 int main(int argc, char *argv[]){
 		int sock_conn, sock_listen;
 		struct sockaddr_in serv_adr;
+		//my_online_games_list.num = 0;
 		
 		// Obrim el socket
 		if ((sock_listen = socket(AF_INET, SOCK_STREAM, 0)) < 0)

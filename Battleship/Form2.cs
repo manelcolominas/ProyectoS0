@@ -4,7 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
+using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,19 +18,95 @@ namespace Battleship
         private List<(int Row, int Column)> userselectedCells = new List<(int, int)>();
         private List<(int Row, int Column)> opponentselectedCells = new List<(int, int)>();
         private string username;
+        private string opponent;
+        private int ID_game;
+        Socket server;
+        private int num_shoots;
 
-        public Form2(string username)
+        public Form2(int ID_game, Socket server, string username, string opponent)
         {
             InitializeComponent();
             form2_shoot_button.Visible = false;
             form2_send_fleet_position_button.Visible = true;
             opponent_dataGridView.CellClick -= opponent_dataGridView_CellClick;
             this.username = username;
+            this.opponent = opponent;
+            this.ID_game = ID_game;
+            this.server = server;
+            user_game_form_label.Text = username;
+            opponent_game_form_label.Text= opponent;
+            this.num_shoots = 0;
+
+        }
+        public void handle_game(string mensaje)
+        {
+            // Split the message to extract the necessary parts
+            string[] parts = mensaje.Split('/');
+
+            // Determine if the message is for the user or opponent
+            int player = int.Parse(parts[1]); // 2 for user, 1 for opponent
+
+            // Declare the target DataGridView
+            DataGridView targetGrid = null;
+
+            // Based on the player, choose the appropriate DataGridView
+            if (player == 2)
+            {
+                targetGrid = user_dataGridView;
+            }
+            else if (player == 1)
+            {
+                targetGrid = opponent_dataGridView;
+            }
+
+            // Extract all row-column positions from the last part
+            string positions = parts[3]; // Example: "7:6-8:3-9:2-"
+            string[] pairs = positions.Split('-'); // Split by '-'
+
+            foreach (string pair in pairs)
+            {
+                if (string.IsNullOrWhiteSpace(pair)) continue; // Skip empty entries
+
+                string[] coordinates = pair.Split(':');
+                if (coordinates.Length != 2) continue; // Invalid format, skip
+
+                // Parse row and column
+                int row = int.Parse(coordinates[0]); // Adjust to 0-based index
+                int column = int.Parse(coordinates[1]); // Adjust to 0-based index
+
+                // Change the row's background color to red
+                targetGrid.Rows[row].Cells[column].Style.BackColor = Color.Red;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (opponentselectedCells.Count == 2)
+            {
+                string message = $"";
+                for (int i = 0; i < opponentselectedCells.Count - 1; i++)
+                {
+                    var (Row, Column) = opponentselectedCells[i];
+                    message += $"{Row:D2}:{Column:D2}*";
+                }
 
+                string serviceCode = "13";
+                string type_of_message = "1"; // shoot
+                int ID_game = get_ID_game();
+                string data_to_send = $"{serviceCode}/{ID_game}/{type_of_message}/{username}/{num_shoots}/{message}";
+                byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                server.Send(data);
+
+                num_shoots++;
+
+                MessageBox.Show(data_to_send, "Celdas Seleccionadas");
+
+            }
+            else if (opponentselectedCells.Count > 2)
+            {
+                MessageBox.Show($"Faltan por seleccionar {2 - userselectedCells.Count} celdas.");
+
+            }
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -37,21 +116,29 @@ namespace Battleship
         }
         private void form2_send_fleet_position_button_Click(object sender, EventArgs e)
         {
-            user_dataGridView.CellClick -= user_dataGridView_CellClick;
-            opponent_dataGridView.CellClick += opponent_dataGridView_CellClick;
             if (userselectedCells.Count == 5)
             {
                 form2_send_fleet_position_button.Visible = false;
 
                 form2_shoot_button.Visible = true;
-                // Genera un mensaje con las coordenadas seleccionadas
-                string message = $"10/{username}/";
+                string message = $"";
                 foreach (var (Row, Column) in userselectedCells)
                 {
-                    message += $"{Row:D2}/{Column:D2}/";
+                    message += $"{Row:D2}:{Column:D2}*";
                 }
+
+                string serviceCode = "13";
+                string type_of_message = "0"; // fleet position
+                int ID_game = get_ID_game();
+                string data_to_send = $"{serviceCode}/{ID_game}/{type_of_message}/{username}/{message}";
+                byte[] data = Encoding.ASCII.GetBytes(data_to_send);
+                server.Send(data);
+
+                user_dataGridView.CellClick -= user_dataGridView_CellClick;
+                opponent_dataGridView.CellClick += opponent_dataGridView_CellClick;
                 // Muestra las coordenadas en un MessageBox
-                MessageBox.Show(message, "Celdas Seleccionadas");
+                MessageBox.Show(data_to_send, "Celdas Seleccionadas");
+
             }
             else
             {
@@ -81,7 +168,7 @@ namespace Battleship
                     }
                     else
                     {
-                        cell.Style.BackColor = Color.Red;
+                        cell.Style.BackColor = Color.Green;
                         opponentselectedCells.Add(cellPosition);
                     }
                 }
@@ -147,6 +234,32 @@ namespace Battleship
                 }
                 dgv.InvalidateCell(cell);
             }
+        }
+
+        private void set_username(string username)
+        {
+            this.username = username;
+        }
+        private string get_username()
+        {
+            return this.username;
+        }
+        private void set_opponent(string opponent)
+        {
+            this.opponent = opponent;
+        }
+        private string get_opponent()
+        {
+            return this.opponent;
+        }
+
+        private void set_ID_game(int ID_game)
+        {
+            this.ID_game = ID_game;
+        }
+        private int get_ID_game()
+        {
+            return this.ID_game;
         }
     }
 }

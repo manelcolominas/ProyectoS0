@@ -22,6 +22,8 @@ namespace Battleship
         Socket server;
         Thread atender;
         string username_of_the_connection;
+        private static Dictionary<int, Form2> instanciasForm2 = new Dictionary<int, Form2>();
+
         public Form1()
         {
             InitializeComponent();
@@ -91,31 +93,19 @@ namespace Battleship
                         }
                         else 
                         {
-                            //   "\nEsther789/Hugo123/User2/"
                             MessageBox.Show("Server response:" + response);
                             this.Invoke(new Action(() => { ProcessOpponentList(response); }));
-                            //ProcessOpponentList(response);
                         }
                         break;
                     case 4: //consultar partidas hechas con un cierto oponente
                         MessageBox.Show("Server response: " + response);
-                        // "\n1/manel007/Hugo123/100/80/2024-10-10 14:00:00\n"
                         this.Invoke(new Action(() => { ShowGamesWithOpponent(response); }));
-                        //ShowGamesWithOpponent(response);
-                        //es pot veure q no fem servir la mateixa funcio q pels oponents xq la resposta ara te 7 columnes
                         break;
                     case 5: //show games   
                         MessageBox.Show("Server response: " + response);
-                        //this.Invoke(new Action(() => { ProcessGameResults(response); }));
                         this.Invoke(new Action(() => { ShowGamesWithOpponent(response); }));
-                        //ProcessGameResults(response);
-                        //server.Close();
                         break;
                     case 6: //show ranking
-                        // Process the response to fill the DataGridView
-                        //"\nHugo123/180\nUser1/160\nmanel007/150\nLaura456/130\n1/0\n"
-                        MessageBox.Show("Server response: " + response);
-                        //ProcessRankingResults(response);
                         this.Invoke(new Action(() => { ProcessRankingResults(response); }));
                         break;
                     case 7:
@@ -133,6 +123,18 @@ namespace Battleship
                     case 8:
                         MessageBox.Show("Disconnected from server");
                         set_username(string.Empty);
+                        break;
+                    case 10:
+                        this.Invoke(new Action(() => {create_game(response); }));
+                        break;
+                    case 14:
+                        string[] elementos_respuesta = trozos_respuesta[1].Split('/');
+                        int ID_game = Convert.ToInt32(elementos_respuesta[2]);
+                        if (instanciasForm2.TryGetValue(ID_game, out Form2 instancia))
+                        {
+                            this.Invoke(new Action(() => { instancia.handle_game(trozos_respuesta[1]); }));
+                            //instancia.handle_game(trozos_respuesta[1]);
+                        }
                         break;
                 }
                 //if (codigo == 8)
@@ -176,12 +178,13 @@ namespace Battleship
                 if (respuesta == DialogResult.Yes)
                 {
                     string bool_respuesta = "1"; // Afirmatiu
-                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}";
+                    DateTime date = DateTime.Now;
+
+                    string formatdate = date.ToString("yyyy-MM-dd");
+                    string data_to_send = $"{serviceCode}/{type_of_message}/{bool_respuesta}/{username}/{opponent[2]}/{formatdate}";
                     byte[] data = Encoding.ASCII.GetBytes(data_to_send);
                     server.Send(data);
 
-                    Form2 gameform = new Form2(username);
-                    gameform.Show();
                 }
                 else if (respuesta == DialogResult.No)
                 {
@@ -196,9 +199,6 @@ namespace Battleship
                 if (opponent[2] == "1")
                 {
                     MessageBox.Show($"{opponent[3]} has accept your game invitation.");
-
-                    Form2 gameform = new Form2(username);
-                    gameform.Show();
                 }
                 else if (opponent[2] == "0")
                 {
@@ -253,13 +253,9 @@ namespace Battleship
             server.Close();
         }
 
-
-
         private void desconnect_server__button_Click(object sender, EventArgs e)
         {
-            //string username = nombre_usuario_label.Text;
             string username = get_username();
-            // Verifica si el evento se dispara y si el usuario está conectado
             MessageBox.Show("Desconectando...");
 
             // Si el usuario está conectado, enviar el mensaje de desconexión al servidor
@@ -295,7 +291,6 @@ namespace Battleship
 
         private void login_panel_login_button_Click(object sender, EventArgs e)
         {
-            //Get the username and password from the TextBoxes
             string username = login_panel_username_textBox.Text;
             //set_username(username);
             //nombre_usuario_label.Text = username;
@@ -310,12 +305,6 @@ namespace Battleship
             server.Send(data);
             MessageBox.Show("Login data sent: " + loginData);
         }
-        // data = "\n1/manel007/Hugo123/100/80/2024-10-10 14:00:00\n"
-        //private void ShowGamesWithOpponent(string data)
-        //{   
-        //    //DataGridView Name: dataGridView
-        //    //Columns Name: Player 1; Player 2; Points Player 1; Ppoints Player 2; Date Time
-        //}
 
         private void ShowGamesWithOpponent(string data)
         {
@@ -346,14 +335,6 @@ namespace Battleship
             }
         }
 
-
-        // response = ""\nHugo123/180\nUser1/160\nmanel007/150\nLaura456/130\n1/0\n""
-        //private void ProcessRankingResults(string response)
-        //{
-        //    // DataGridView Name: dataGridView
-        //    // Columns Name: Players; Total Points
-        //}
-
         private void ProcessRankingResults(string response)
         {
             // Clear previous data
@@ -377,15 +358,6 @@ namespace Battleship
                 }
             }
         }
-
-
-        // response = "\nEsther789/Hugo123/User2/"
-        //private void ProcessOpponentList(string response)
-        //{
-        //    // DataGridView Name: dataGridView
-        //    // Columns Name: Opponents;
-        //}
-
         private void ProcessOpponentList(string response)
         {
             // Clear previous data
@@ -408,18 +380,8 @@ namespace Battleship
             }
         }
 
-
-        private void ProcessGameResults(string response)
-        {
-
-        }
-
         private void query_Button_Click(object sender, EventArgs e)
         {
-            //dataGridView.Rows.Clear(); //limpiamos el data grid donde se mostraran las partidas contra un oponente
-            //dataGridView.Columns.Clear();
-            //dataGridView.DataSource = null;
-
             if (players_list_radioButton.Checked)
             {
                 //quiere consultar la lista de jugadores con los que ha jugado una partida al menos una vez
@@ -460,12 +422,11 @@ namespace Battleship
                 string formattedInitialDate = initial_date.ToString("yyyy-MM-dd");
                 string formattedEndingDate = ending_date.ToString("yyyy-MM-dd");
 
-                // Prepare the message to send
                 string mensaje = $"5/{username}/{formattedInitialDate}/{formattedEndingDate}";
                 MessageBox.Show("data sent:" + mensaje);
-                // Send the message to the server
+                
                 byte[] msg = Encoding.ASCII.GetBytes(mensaje);
-                server.Send(msg); // Sending the message using server.Client.Send
+                server.Send(msg);
 
             }
             else if (ranking_radioButton.Checked)
@@ -484,8 +445,8 @@ namespace Battleship
                 string username = nombre_usuario_label.Text;
                 string opponent = game_invitation_textBox.Text;
 
-                string serviceCode = "7";  // 1 for signup
-                string type_of_message = "1"; // Invitacions
+                string serviceCode = "7"; 
+                string type_of_message = "1"; // Invitacions 
                 string data_to_send = $"{serviceCode}/{type_of_message}/{username}/{opponent}";
                 // Send the message to the server
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(data_to_send);
@@ -540,10 +501,27 @@ namespace Battleship
 
         private void new_game_User_panel_button_Click(object sender, EventArgs e)
         {
-            string username = get_username();
-            Form2 gameform = new Form2(username);
+            //int ID_game = 18;
+            //string username = "manel007";
+            //string opponent = "esther789";
+            //Form2 gameform = new Form2(ID_game,server, username, opponent);
+            //instanciasForm2.Add(ID_game, gameform);
+            //gameform.Show();
+        }
 
+        //private void create_game(string response)
+        private void create_game(string response)
+        {
+            //    "/17/manel007/esther789"
+            string[] trozos_respuesta = response.Split('/');
+
+            int ID_game = Convert.ToInt32(trozos_respuesta[1]);
+            string username = trozos_respuesta[2];
+            string opponent = trozos_respuesta[3];
+            Form2 gameform = new Form2(ID_game,server,username,opponent);
+            instanciasForm2.Add(ID_game, gameform);
             gameform.Show();
         }
+
     }
 }
